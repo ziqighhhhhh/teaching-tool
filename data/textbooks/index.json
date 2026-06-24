@@ -1,0 +1,60 @@
+{
+  "subjects": ["数学", "语文", "英语", "物理", "化学", "生物", "历史", "地理"],
+  "grades": ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级", "七年级", "八年级", "九年级", "高一", "高二", "高三"],
+  "textbooks": [
+    {
+      "id": "math-rjb-7-1",
+      "name": "人教版七年级上册数学",
+      "subject": "数学",
+      "grade": "七年级",
+      "publisher": "人民教育出版社",
+      "path": "data/textbooks/math/rjb-7-1.json",
+      "sourceUrl": "https://github.com/TapXWorld/ChinaTextbook/blob/master/初中/数学/人教版-人民教育出版社/七年级/义务教育教科书·数学七年级上册.pdf"
+    },
+    {
+      "id": "math-rjb-7-2",
+      "name": "人教版七年级下册数学",
+      "subject": "数学",
+      "grade": "七年级",
+      "publisher": "人民教育出版社",
+      "path": "data/textbooks/math/rjb-7-2.json",
+      "sourceUrl": "https://github.com/TapXWorld/ChinaTextbook/blob/master/初中/数学/人教版-人民教育出版社/七年级/义务教育教科书·数学七年级下册.pdf"
+    },
+    {
+      "id": "math-rjb-8-1",
+      "name": "人教版八年级上册数学",
+      "subject": "数学",
+      "grade": "八年级",
+      "publisher": "人民教育出版社",
+      "path": "data/textbooks/math/rjb-8-1.json",
+      "sourceUrl": "https://github.com/TapXWorld/ChinaTextbook/blob/master/初中/数学/人教版-人民教育出版社/八年级/义务教育教科书·数学八年级上册.pdf"
+    },
+    {
+      "id": "math-rjb-8-2",
+      "name": "人教版八年级下册数学",
+      "subject": "数学",
+      "grade": "八年级",
+      "publisher": "人民教育出版社",
+      "path": "data/textbooks/math/rjb-8-2.json",
+      "sourceUrl": "https://github.com/TapXWorld/ChinaTextbook/blob/master/初中/数学/人教版-人民教育出版社/八年级/义务教育教科书·数学八年级下册.pdf"
+    },
+    {
+      "id": "math-rjb-9-1",
+      "name": "人教版九年级上册数学",
+      "subject": "数学",
+      "grade": "九年级",
+      "publisher": "人民教育出版社",
+      "path": "data/textbooks/math/rjb-9-1.json",
+      "sourceUrl": "https://github.com/TapXWorld/ChinaTextbook/blob/master/初中/数学/人教版-人民教育出版社/九年级/义务教育教科书·数学九年级上册.pdf"
+    },
+    {
+      "id": "math-rjb-9-2",
+      "name": "人教版九年级下册数学",
+      "subject": "数学",
+      "grade": "九年级",
+      "publisher": "人民教育出版社",
+      "path": "data/textbooks/math/rjb-9-2.json",
+      "sourceUrl": "https://github.com/TapXWorld/ChinaTextbook/blob/master/初中/数学/人教版-人民教育出版社/九年级/义务教育教科书·数学九年级下册.pdf"
+    }
+  ]
+}
