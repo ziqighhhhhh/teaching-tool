@@ -258,6 +258,10 @@ const App = {
    * 生成讲义
    * @param {boolean} forceRefresh - 强制刷新（跳过缓存）
    */
+  /**
+   * 生成讲义
+   * @param {boolean} forceRefresh - 强制刷新（跳过缓存）
+   */
   async generateHandout(forceRefresh = false) {
     if (this.state.isGenerating) return;
     
@@ -266,18 +270,6 @@ const App = {
     if (!topic) {
       alert('请输入知识点或选择章节');
       return;
-    }
-    
-    // 检查 API 配置（演示模式下跳过）
-    if (!this.state.demoMode && !SkillCaller.isConfigured()) {
-      const endpoint = prompt('请输入 API 端点（如：https://api.openai.com/v1/chat/completions）：');
-      const key = prompt('请输入 API 密钥：');
-      if (endpoint && key) {
-        SkillCaller.updateConfig({ apiEndpoint: endpoint, apiKey: key });
-        this.state.demoMode = false;
-      } else {
-        this.state.demoMode = true;
-      }
     }
     
     this.setGenerating(true);
@@ -304,19 +296,13 @@ const App = {
         }
       }
       
-      // 生成数据
-      let data;
-      if (this.state.demoMode) {
-        console.log('Demo mode: generating mock data');
-        data = this.generateMockData(topic);
-      } else {
-        console.log('Generating handout...');
-        data = await SkillCaller.generateHandout(topic, {
-          subject: this.elements.subjectSelect.value,
-          grade: this.elements.gradeSelect.value,
-          difficulty: this.state.currentDifficulty
-        });
-      }
+      // 调用本地 API 生成
+      console.log('Generating handout...');
+      const data = await this.callLocalAPI(topic, {
+        subject: this.elements.subjectSelect.value,
+        grade: this.elements.gradeSelect.value,
+        difficulty: this.state.currentDifficulty
+      });
       
       // 保存到缓存
       const html = await this.renderHandout(data);
@@ -331,10 +317,58 @@ const App = {
       
     } catch (error) {
       console.error('Generation failed:', error);
-      alert('生成失败：' + error.message);
+      // 如果 API 失败，使用演示模式
+      console.log('API failed, falling back to demo mode...');
+      try {
+        const data = this.generateMockData(topic);
+        const html = await this.renderHandout(data);
+        const fallbackConfig = {
+          template: this.state.currentTemplate,
+          theme: this.state.currentTheme,
+          difficulty: this.state.currentDifficulty
+        };
+        CacheManager.set(await CacheManager.generateKey(topic, fallbackConfig), {
+          html,
+          structuredData: data,
+          skillVersion: '1.0'
+        });
+        this.state.lastGeneratedData = data;
+        this.updateCacheInfo();
+      } catch (demoError) {
+        alert('生成失败：' + error.message);
+      }
     } finally {
       this.setGenerating(false);
     }
+  },
+
+  /**
+   * 调用本地 API
+   * @param {string} topic - 知识点
+   * @param {object} options - 选项
+   * @returns {Promise<object>}
+   */
+  async callLocalAPI(topic, options = {}) {
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        topic: topic,
+        subject: options.subject || '',
+        grade: options.grade || '',
+        difficulty: options.difficulty || 'basic'
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.error || `HTTP ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result.data;
   },
 
   /**
