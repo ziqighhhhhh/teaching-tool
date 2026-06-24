@@ -187,6 +187,21 @@ body {
   background-color: #388e3c;
 }
 
+.preview-btn {
+  background-color: var(--color-accent);
+  color: white;
+  padding: 8px 16px;
+  width: auto;
+}
+
+.preview-btn:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.preview-btn.active {
+  background-color: #ff9800;
+}
+
 /* 状态栏 */
 .status-bar {
   margin-top: 16px;
@@ -209,19 +224,38 @@ body {
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 12px 24px;
+  gap: 8px;
+  padding: 10px 16px;
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
   z-index: 5;
+  flex-wrap: wrap;
 }
 
 .tool-group {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   align-items: center;
+  padding-right: 8px;
+  border-right: 1px solid var(--color-border);
+}
+
+.tool-group:last-child {
+  border-right: none;
+}
+
+.format-group button {
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 32px;
+  transition: all var(--transition-fast);
 }
 
 .toolbar button {
@@ -239,11 +273,18 @@ body {
   border-color: var(--color-accent);
 }
 
+.toolbar button:active {
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
 .toolbar select {
   padding: 6px 12px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   font-size: 13px;
+  background-color: var(--color-surface);
 }
 
 /* 预览容器 */
@@ -255,6 +296,19 @@ body {
   justify-content: center;
   align-items: flex-start;
   background-color: #e8e8e8;
+  transition: background-color 0.3s ease;
+}
+
+/* 打印预览模式 */
+.preview-container.print-preview-mode {
+  background-color: white;
+  padding: 0;
+}
+
+.preview-container.print-preview-mode .handout-page {
+  box-shadow: none;
+  margin: 0;
+  border-radius: 0;
 }
 
 /* 讲义页面 */
@@ -270,6 +324,10 @@ body {
 
 .handout-page:focus {
   outline: none;
+}
+
+.handout-page.print-preview {
+  border: 1px solid #ddd;
 }
 
 .placeholder {
@@ -324,6 +382,8 @@ body {
 @media print {
   body {
     background-color: white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
   
   .input-panel,
@@ -347,11 +407,53 @@ body {
     box-shadow: none;
     padding: 0;
     page-break-after: always;
+    break-after: page;
+    overflow: visible;
+  }
+  
+  .handout-page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+  
+  /* 防止内容被截断 */
+  .handout-page * {
+    break-inside: avoid;
+  }
+  
+  .handout-page p,
+  .handout-page li {
+    break-inside: avoid;
+    orphans: 3;
+    widows: 3;
+  }
+  
+  .handout-page .example-box,
+  .handout-page .practice-box,
+  .handout-page .callout,
+  .handout-page .formula-box {
+    break-inside: avoid;
+  }
+  
+  /* 页眉页脚 */
+  .handout-page::before {
+    content: attr(data-title);
+    display: block;
+    text-align: center;
+    font-size: 10px;
+    color: #999;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
   }
   
   @page {
     size: A4;
     margin: 15mm 10mm;
+  }
+  
+  @page :first {
+    margin-top: 10mm;
   }
 }
 
@@ -374,5 +476,18 @@ body {
   .handout-page {
     width: 100%;
     min-height: auto;
+  }
+  
+  .toolbar {
+    padding: 8px;
+  }
+  
+  .tool-group {
+    padding-right: 4px;
+  }
+  
+  .format-group button {
+    padding: 4px 6px;
+    font-size: 12px;
   }
 }

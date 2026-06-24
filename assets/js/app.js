@@ -38,6 +38,9 @@ const App = {
       this.showConfigNotice();
     }
     
+    // 初始化编辑器
+    Editor.init('handout-content', 'editor-toolbar', 'preview-container');
+    
     console.log('App initialized. Demo mode:', this.state.demoMode);
   },
 

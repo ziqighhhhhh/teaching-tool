@@ -105,13 +105,19 @@
             </div>
         </aside>
         
-        <!-- 编辑预览区 -->
+            <!-- 编辑预览区 -->
         <main class="editor-preview">
             <div class="toolbar" id="editor-toolbar">
-                <div class="tool-group">
+                <div class="tool-group format-group">
                     <button data-action="bold" title="加粗">B</button>
                     <button data-action="italic" title="斜体">I</button>
                     <button data-action="underline" title="下划线">U</button>
+                    <button data-action="strikeThrough" title="删除线">S</button>
+                </div>
+                <div class="tool-group format-group">
+                    <button data-action="justifyLeft" title="左对齐">&#8676;</button>
+                    <button data-action="justifyCenter" title="居中">&#8596;</button>
+                    <button data-action="justifyRight" title="右对齐">&#8677;</button>
                 </div>
                 <div class="tool-group">
                     <select id="font-size-select">
@@ -120,7 +126,19 @@
                         <option value="16" selected>16px</option>
                         <option value="18">18px</option>
                         <option value="20">20px</option>
+                        <option value="24">24px</option>
                     </select>
+                </div>
+                <div class="tool-group format-group">
+                    <button data-action="insertUnorderedList" title="无序列表">&#8226;&#8226;&#8226;</button>
+                    <button data-action="insertOrderedList" title="有序列表">1. 2. 3.</button>
+                </div>
+                <div class="tool-group format-group">
+                    <button data-action="undo" title="撤销">&#8630;</button>
+                    <button data-action="redo" title="重做">&#8631;</button>
+                </div>
+                <div class="tool-group">
+                    <button id="preview-toggle" class="preview-btn" title="切换预览">打印预览</button>
                 </div>
                 <div class="tool-group">
                     <button id="export-btn" class="export-btn">打印 / 导出 PDF</button>
