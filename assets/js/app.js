@@ -11,7 +11,8 @@ const App = {
     currentDifficulty: 'basic',
     isGenerating: false,
     lastGeneratedData: null,
-    demoMode: false  // 演示模式（无 API 时使用 mock 数据）
+    demoMode: false,  // 演示模式（无 API 时使用 mock 数据）
+    debugMode: true   // 开发阶段：true=只显示纯文本内容，false=直接渲染
   },
 
   /**
@@ -54,6 +55,11 @@ const App = {
       loadingOverlay: document.getElementById('loading-overlay'),
       statusBar: document.getElementById('status-bar')
     };
+    
+    // 开发阶段：创建"渲染页面"按钮
+    if (this.state.debugMode) {
+      this.createRenderButton();
+    }
   },
 
   /**
@@ -100,23 +106,26 @@ const App = {
   },
 
   /**
-   * 切换输入模式
-   * @param {string} mode - 模式
+   * 创建"渲染页面"按钮（开发阶段使用）
    */
-  switchInputMode(mode) {
-    this.state.inputMode = mode;
+  createRenderButton() {
+    const renderBtn = document.createElement('button');
+    renderBtn.id = 'render-btn';
+    renderBtn.className = 'render-btn hidden';
+    renderBtn.textContent = '渲染页面';
+    renderBtn.style.cssText = 'background: #4CAF50; color: white; margin-top: 10px; width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;';
     
-    const groups = {
-      text: this.elements.textInputGroup,
-      textbook: this.elements.textbookInputGroup,
-      upload: this.elements.uploadInputGroup
-    };
+    // 插入到"重新生成"按钮后面
+    const refreshBtn = document.getElementById('refresh-btn');
+    refreshBtn.parentNode.insertBefore(renderBtn, refreshBtn.nextSibling);
     
-    Object.keys(groups).forEach(key => {
-      if (key === mode) {
-        groups[key].classList.remove('hidden');
-      } else {
-        groups[key].classList.add('hidden');
+    this.elements.renderBtn = renderBtn;
+    
+    // 绑定事件
+    renderBtn.addEventListener('click', () => {
+      if (this.state.lastGeneratedData) {
+        this.renderHandout(this.state.lastGeneratedData);
+        renderBtn.classList.add('hidden');
       }
     });
   },
@@ -220,7 +229,11 @@ const App = {
         if (cached) {
           console.log('Cache hit');
           this.state.lastGeneratedData = cached.structuredData;
-          this.renderHandout(cached.structuredData);
+          if (this.state.debugMode) {
+            this.showRawContent(cached.structuredData);
+          } else {
+            this.renderHandout(cached.structuredData);
+          }
           this.setGenerating(false);
           this.updateCacheInfo();
           return;
@@ -235,9 +248,16 @@ const App = {
       });
       
       // 保存到缓存
-      const html = await this.renderHandout(data);
+      if (this.state.debugMode) {
+        // 开发阶段：显示纯文本
+        this.showRawContent(data);
+      } else {
+        // 正常流程：直接渲染
+        const html = await this.renderHandout(data);
+      }
+      
       CacheManager.set(cacheKey, {
-        html,
+        html: '',
         structuredData: data,
         skillVersion: '1.0'
       });
@@ -256,9 +276,17 @@ const App = {
           difficulty: this.state.currentDifficulty
         };
         const data = this.generateMockData(inputData.topic, '数学', inputData.grade);
-        const html = await this.renderHandout(data);
+        
+        if (this.state.debugMode) {
+          // 开发阶段：显示纯文本
+          this.showRawContent(data);
+        } else {
+          // 正常流程：直接渲染
+          const html = await this.renderHandout(data);
+        }
+        
         CacheManager.set(await CacheManager.generateKey(inputData.topic + inputData.grade, fallbackConfig), {
-          html,
+          html: '',
           structuredData: data,
           skillVersion: '1.0'
         });
@@ -406,6 +434,119 @@ const App = {
     
     Editor.setContent(html);
     return html;
+  },
+
+  /**
+   * 显示纯文本内容（开发阶段调试用）
+   * @param {object} data - 讲义数据
+   */
+  showRawContent(data) {
+    const { topic, subject, grade, difficulty } = data;
+    
+    let text = `=== ${topic} ===\n`;
+    text += `学科: ${subject} | 年级: ${grade} | 难度: ${difficulty}\n\n`;
+    
+    // 模块1: 知识速览
+    text += `【知识速览】\n`;
+    text += this.stripHtml(data.knowledge_overview) + '\n\n';
+    
+    // 模块2: 重点精讲
+    text += `【重点精讲】\n`;
+    text += this.stripHtml(data.key_explanation) + '\n\n';
+    
+    // 模块3: 典例分析
+    text += `【典例分析】\n`;
+    if (data.classic_examples && data.classic_examples.length > 0) {
+      data.classic_examples.forEach((ex, i) => {
+        text += `例题 ${i + 1}: ${ex.title || '无标题'}\n`;
+        text += `  题目: ${ex.problem || '无'}\n`;
+        text += `  分析: ${ex.analysis || '无'}\n`;
+        text += `  解答: ${ex.solution || '无'}\n`;
+        text += `  答案: ${ex.answer || '无'}\n`;
+        text += `  方法总结: ${ex.method_summary || '无'}\n\n`;
+      });
+    } else {
+      text += '(无例题)\n\n';
+    }
+    
+    // 模块4: 变式训练
+    text += `【变式训练】\n`;
+    if (data.variation_training && data.variation_training.length > 0) {
+      data.variation_training.forEach((q, i) => {
+        text += `变式 ${i + 1}: ${q.question || '无'}\n`;
+        text += `  提示: ${q.hint || '无'}\n\n`;
+      });
+    } else {
+      text += '(无变式训练)\n\n';
+    }
+    
+    // 模块5: 易错警示
+    text += `【易错警示】\n`;
+    if (data.common_mistakes && data.common_mistakes.length > 0) {
+      data.common_mistakes.forEach((m, i) => {
+        text += `错误 ${i + 1}:\n`;
+        text += `  常见错误: ${m.wrong || '无'}\n`;
+        text += `  正确做法: ${m.correct || '无'}\n`;
+        text += `  原因分析: ${m.reason || '无'}\n\n`;
+      });
+    } else {
+      text += '(无易错警示)\n\n';
+    }
+    
+    // 模块6: 巩固练习
+    text += `【巩固练习】\n`;
+    if (data.practice) {
+      if (data.practice.basic && data.practice.basic.length > 0) {
+        text += '基础巩固:\n';
+        data.practice.basic.forEach((q, i) => {
+          text += `  ${i + 1}. ${q.question || '无'}\n`;
+          text += `     答案: ${q.answer || '无'}\n`;
+        });
+        text += '\n';
+      }
+      if (data.practice.advanced && data.practice.advanced.length > 0) {
+        text += '能力提升:\n';
+        data.practice.advanced.forEach((q, i) => {
+          text += `  ${i + 1}. ${q.question || '无'}\n`;
+          text += `     答案: ${q.answer || '无'}\n`;
+        });
+        text += '\n';
+      }
+      if (data.practice.extension && data.practice.extension.length > 0) {
+        text += '拓展探究:\n';
+        data.practice.extension.forEach((q, i) => {
+          text += `  ${i + 1}. ${q.question || '无'}\n`;
+          text += `     答案: ${q.answer || '无'}\n`;
+        });
+        text += '\n';
+      }
+    } else {
+      text += '(无练习)\n\n';
+    }
+    
+    // 模块7: 归纳总结
+    text += `【归纳总结】\n`;
+    text += this.stripHtml(data.summary) + '\n';
+    
+    // 显示纯文本到编辑器
+    this.elements.handoutContent.innerHTML = `<pre style="white-space: pre-wrap; font-family: monospace; font-size: 14px; line-height: 1.6; padding: 20px; background: #f9f9f9; color: #333;">${text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
+    
+    // 显示渲染按钮
+    if (this.elements.renderBtn) {
+      this.elements.renderBtn.classList.remove('hidden');
+    }
+  },
+
+  /**
+   * 去除 HTML 标签
+   * @param {string} html - HTML 字符串
+   * @returns {string} - 纯文本
+   */
+  stripHtml(html) {
+    if (!html) return '';
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
   },
 
   /**
