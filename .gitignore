@@ -17,3 +17,13 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Large data directories
+ChinaTextbook-master/
+data/chroma_db/
+data/textbooks/parsed/
+data/textbooks/text_books.json
+
+# Temporary test files
+test_api.js
+test_mock_data.js

@@ -1,59 +1,91 @@
 <div class="template-classic">
   <div class="handout-content">
-    <h1 class="title">{{topic}}</h1>
-    
-    <div class="meta-info">
-      <span class="tag">{{subject}}</span>
-      <span class="tag">{{grade}}</span>
-      <span class="tag">{{difficulty}}</span>
+    <div class="handout-header">
+      <h1 class="title">{{topic}}</h1>
+      <div class="meta-info">
+        <span class="meta-item">{{subject}}</span>
+        <span class="meta-item">{{grade}}</span>
+        <span class="meta-item">{{difficulty}}</span>
+      </div>
     </div>
     
     <div class="divider"></div>
     
-    <div class="section-title">学习目标</div>
-    <div class="section-content">
-      {{learningObjectives}}
-    </div>
-    
-    <div class="section-title">重点难点</div>
-    <div class="section-content">
-      <p><strong>重点：</strong></p>
-      {{keyPoints}}
-      <p><strong>难点：</strong></p>
-      {{difficultPoints}}
-    </div>
-    
-    <div class="section-title">知识讲解</div>
-    <div class="section-content">
-      {{introduction}}
-      {{explanation}}
-    </div>
-    
-    <div class="section-title">例题解析</div>
-    <div class="section-content">
-      {{examples}}
-    </div>
-    
-    <div class="section-title">练习题</div>
-    <div class="section-content">
-      {{practice}}
-    </div>
-    
-    <div class="section-title">常见误解</div>
-    <div class="section-content">
-      {{commonMisconceptions}}
-    </div>
-    
-    <div class="section-title">核心词汇</div>
-    <div class="section-content">
-      <div class="vocabulary-list">
-        {{keyVocabulary}}
+    <!-- 知识速览 -->
+    <div class="module knowledge-overview">
+      <div class="module-header">
+        <div class="module-icon">★</div>
+        <div class="module-title">知识速览</div>
+      </div>
+      <div class="module-content">
+        {{knowledge_overview}}
       </div>
     </div>
     
-    <div class="summary-box">
-      <div class="summary-title">课堂总结</div>
-      {{summary}}
+    <!-- 重点精讲 -->
+    <div class="module key-explanation">
+      <div class="module-header">
+        <div class="module-icon">▶</div>
+        <div class="module-title">重点精讲</div>
+      </div>
+      <div class="module-content">
+        {{key_explanation}}
+      </div>
+    </div>
+    
+    <!-- 典例分析 -->
+    <div class="module classic-examples">
+      <div class="module-header">
+        <div class="module-icon">●</div>
+        <div class="module-title">典例分析</div>
+      </div>
+      <div class="module-content">
+        {{classic_examples}}
+      </div>
+    </div>
+    
+    <!-- 变式训练 -->
+    <div class="module variation-training">
+      <div class="module-header">
+        <div class="module-icon">◆</div>
+        <div class="module-title">变式训练</div>
+      </div>
+      <div class="module-content">
+        {{variation_training}}
+      </div>
+    </div>
+    
+    <!-- 易错警示 -->
+    <div class="module common-mistakes">
+      <div class="module-header">
+        <div class="module-icon">⚠</div>
+        <div class="module-title">易错警示</div>
+      </div>
+      <div class="module-content">
+        {{common_mistakes}}
+      </div>
+    </div>
+    
+    <!-- 巩固练习 -->
+    <div class="module practice-section">
+      <div class="module-header">
+        <div class="module-icon">✎</div>
+        <div class="module-title">巩固练习</div>
+      </div>
+      <div class="module-content">
+        {{practice}}
+      </div>
+    </div>
+    
+    <!-- 知识总结 -->
+    <div class="module summary-section">
+      <div class="module-header">
+        <div class="module-icon">◉</div>
+        <div class="module-title">知识总结</div>
+      </div>
+      <div class="module-content">
+        {{summary}}
+      </div>
     </div>
   </div>
 </div>

@@ -21,48 +21,28 @@
                 <p class="subtitle">输入知识点，自动生成精美讲义</p>
             </header>
             
-            <div class="input-section">
-                <label for="input-mode">输入方式</label>
-                <select id="input-mode">
-                    <option value="text">直接输入知识点</option>
-                    <option value="textbook">选择教科书章节</option>
-                    <option value="upload">上传文档</option>
-                </select>
-            </div>
-            
             <!-- 文本输入 -->
             <div class="input-group" id="text-input-group">
                 <label for="topic-input">知识点描述</label>
                 <textarea id="topic-input" rows="4" placeholder="例如：请生成关于"光的折射"的讲义，包含定义、定律、例题..."></textarea>
-            </div>
-            
-            <!-- 教科书选择 -->
-            <div class="input-group hidden" id="textbook-input-group">
-                <label>选择章节</label>
-                <div class="cascade-select">
-                    <select id="subject-select">
-                        <option value="">学科</option>
-                    </select>
-                    <select id="grade-select">
-                        <option value="">年级</option>
-                    </select>
-                    <select id="textbook-select">
-                        <option value="">教科书</option>
-                    </select>
-                    <select id="chapter-select">
-                        <option value="">章节</option>
-                    </select>
-                    <select id="section-select">
-                        <option value="">小节</option>
+                
+                <div style="margin-top: 12px;">
+                    <label for="grade-manual">年级</label>
+                    <select id="grade-manual">
+                        <option value="一年级">一年级</option>
+                        <option value="二年级">二年级</option>
+                        <option value="三年级">三年级</option>
+                        <option value="四年级">四年级</option>
+                        <option value="五年级">五年级</option>
+                        <option value="六年级">六年级</option>
+                        <option value="七年级">七年级</option>
+                        <option value="八年级">八年级</option>
+                        <option value="九年级">九年级</option>
+                        <option value="高一">高一</option>
+                        <option value="高二">高二</option>
+                        <option value="高三">高三</option>
                     </select>
                 </div>
-            </div>
-            
-            <!-- 文件上传 -->
-            <div class="input-group hidden" id="upload-input-group">
-                <label for="file-upload">上传文档</label>
-                <input type="file" id="file-upload" accept=".pdf,.doc,.docx,.txt,.md">
-                <p class="hint">支持 PDF、Word、TXT、Markdown</p>
             </div>
             
             <!-- 配置选项 -->
@@ -98,39 +78,6 @@
             <!-- 生成按钮 -->
             <button class="generate-btn" id="generate-btn">生成讲义</button>
             <button class="refresh-btn hidden" id="refresh-btn">重新生成</button>
-            
-            <!-- API 配置 -->
-            <div class="input-section api-config-section">
-                <label for="api-config-toggle" class="config-toggle-label">API 配置 (可选)</label>
-                <div class="api-config-content hidden" id="api-config-content">
-                    <div class="input-group">
-                        <label for="api-endpoint">API 端点</label>
-                        <input type="text" id="api-endpoint" placeholder="https://api.openai.com/v1/chat/completions">
-                    </div>
-                    <div class="input-group">
-                        <label for="api-key">API 密钥</label>
-                        <input type="password" id="api-key" placeholder="sk-...">
-                    </div>
-                    <div class="input-group">
-                        <label for="api-model">模型</label>
-                        <select id="api-model">
-                            <option value="gpt-4">GPT-4</option>
-                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                            <option value="claude-3-sonnet">Claude 3 Sonnet</option>
-                        </select>
-                    </div>
-                    <button class="config-save-btn" id="save-config-btn">保存配置</button>
-                    <p class="hint">不配置将使用演示模式（生成示例数据）</p>
-                </div>
-            </div>
-            
-            <!-- 缓存管理 -->
-            <div class="input-section cache-section">
-                <div class="cache-info-bar">
-                    <span id="cache-info">缓存: 0 条</span>
-                    <button class="cache-clear-btn" id="clear-cache-btn">清理缓存</button>
-                </div>
-            </div>
         </aside>
         
             <!-- 编辑预览区 -->

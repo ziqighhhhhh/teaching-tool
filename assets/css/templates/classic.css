@@ -1,192 +1,343 @@
-/* 经典课堂模板 */
+/* 经典课堂模板 - 7 模块结构 */
 
 .template-classic .handout-content {
   font-family: var(--font-serif);
-  line-height: var(--line-height);
+  line-height: 1.8;
   color: var(--theme-text);
 }
 
-.template-classic .title {
-  font-size: var(--font-size-h1);
-  font-weight: 700;
-  color: var(--theme-primary);
+.template-classic .handout-header {
   text-align: center;
   margin-bottom: 24px;
-  padding-bottom: 12px;
+  padding-bottom: 16px;
   border-bottom: 3px solid var(--theme-primary);
+}
+
+.template-classic .title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--theme-primary);
+  margin-bottom: 12px;
 }
 
 .template-classic .meta-info {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  margin-bottom: 20px;
-  font-size: 13px;
-  color: var(--theme-text-secondary);
+  gap: 12px;
 }
 
-.template-classic .meta-info .tag {
+.template-classic .meta-item {
   background-color: var(--theme-primary-light);
   color: var(--theme-primary);
-  padding: 2px 8px;
-  border-radius: 12px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* 模块通用样式 */
+.template-classic .module {
+  margin-bottom: 24px;
+  border: 1px solid var(--theme-border);
+  border-radius: var(--border-radius, 8px);
+  overflow: hidden;
+}
+
+.template-classic .module-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background-color: var(--theme-primary);
+  color: white;
+}
+
+.template-classic .module-icon {
+  font-size: 18px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255,255,255,0.2);
+  border-radius: 50%;
+}
+
+.template-classic .module-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.template-classic .module-content {
+  padding: 16px;
+  background-color: var(--theme-surface);
+}
+
+/* 知识速览 */
+.template-classic .knowledge-overview .module-header {
+  background-color: var(--theme-primary);
+}
+
+.template-classic .knowledge-overview ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.template-classic .knowledge-overview li {
+  padding: 8px 0;
+  padding-left: 24px;
+  position: relative;
+  border-bottom: 1px dashed var(--theme-border);
+}
+
+.template-classic .knowledge-overview li:last-child {
+  border-bottom: none;
+}
+
+.template-classic .knowledge-overview li::before {
+  content: "●";
+  position: absolute;
+  left: 0;
+  color: var(--theme-primary);
   font-size: 12px;
 }
 
-.template-classic .section-title {
-  font-size: var(--font-size-h2);
-  font-weight: 700;
-  color: var(--theme-text);
-  margin-top: 24px;
-  margin-bottom: 12px;
-  padding-left: 12px;
-  border-left: 4px solid var(--theme-primary);
+/* 重点精讲 */
+.template-classic .key-explanation .module-header {
+  background-color: var(--theme-secondary);
 }
 
-.template-classic .section-content {
-  padding-left: 16px;
-}
-
-.template-classic .section-content p {
+.template-classic .key-explanation p {
   margin-bottom: 12px;
   text-align: justify;
 }
 
-.template-classic .objective-list {
-  list-style: none;
-  padding: 0;
-}
-
-.template-classic .objective-list li {
-  padding: 8px 0;
-  padding-left: 28px;
-  position: relative;
-}
-
-.template-classic .objective-list li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
+.template-classic .key-explanation strong {
   color: var(--theme-primary);
-  font-weight: bold;
 }
 
-.template-classic .key-point-list {
-  list-style: none;
-  padding: 0;
-}
-
-.template-classic .key-point-list li {
-  padding: 8px 0;
-  padding-left: 28px;
-  position: relative;
-}
-
-.template-classic .key-point-list li::before {
-  content: "★";
-  position: absolute;
-  left: 0;
-  color: var(--theme-secondary);
+/* 典例分析 */
+.template-classic .classic-examples .module-header {
+  background-color: var(--theme-primary);
 }
 
 .template-classic .example-box {
   background-color: var(--theme-primary-light);
   border-radius: 8px;
   padding: 16px;
-  margin: 16px 0;
+  margin-bottom: 16px;
   border-left: 4px solid var(--theme-primary);
 }
 
-.template-classic .example-box .example-header {
+.template-classic .example-header {
   font-weight: 700;
   color: var(--theme-primary);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.template-classic .example-box .example-problem {
+.template-classic .example-section {
   margin-bottom: 12px;
-  padding: 12px;
-  background-color: white;
-  border-radius: 4px;
-}
-
-.template-classic .example-box .example-solution {
-  margin-bottom: 12px;
-  padding: 12px;
-  background-color: white;
-  border-radius: 4px;
-}
-
-.template-classic .example-box .example-solution strong {
-  color: var(--theme-primary);
-}
-
-.template-classic .example-box .example-answer {
   padding: 8px 12px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.template-classic .example-label {
+  font-weight: 700;
+  color: var(--theme-text-secondary);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.template-classic .example-problem {
+  font-weight: 600;
+  color: var(--theme-text);
+}
+
+.template-classic .example-solution {
+  color: var(--theme-text);
+}
+
+.template-classic .example-answer {
   background-color: var(--theme-secondary-light);
+  padding: 8px 12px;
   border-radius: 4px;
   font-weight: 600;
+  color: var(--theme-secondary);
 }
 
-.template-classic .practice-box {
+.template-classic .example-method {
+  font-size: 14px;
+  color: var(--theme-text-secondary);
+  font-style: italic;
+}
+
+/* 变式训练 */
+.template-classic .variation-training .module-header {
+  background-color: var(--theme-secondary);
+}
+
+.template-classic .variation-box {
   background-color: var(--theme-secondary-light);
   border-radius: 8px;
   padding: 16px;
-  margin: 16px 0;
+  margin-bottom: 12px;
   border-left: 4px solid var(--theme-secondary);
 }
 
-.template-classic .practice-box .practice-header {
+.template-classic .variation-header {
   font-weight: 700;
   color: var(--theme-secondary);
   margin-bottom: 8px;
 }
 
-.template-classic .practice-box .practice-hint {
-  margin-top: 8px;
-  padding: 8px;
-  background-color: white;
-  border-radius: 4px;
+.template-classic .variation-question {
+  margin-bottom: 8px;
+  color: var(--theme-text);
+}
+
+.template-classic .variation-hint {
   font-size: 13px;
   color: var(--theme-text-secondary);
-}
-
-.template-classic .practice-box .practice-answer {
-  margin-top: 8px;
-  padding: 8px;
-  background-color: var(--theme-primary-light);
+  background-color: white;
+  padding: 6px 10px;
   border-radius: 4px;
-  font-size: 13px;
 }
 
-.template-classic .summary-box {
-  background-color: var(--theme-highlight);
+.template-classic .hint-icon {
+  color: var(--theme-secondary);
+  font-weight: 600;
+}
+
+/* 易错警示 */
+.template-classic .common-mistakes .module-header {
+  background-color: #ff9800;
+}
+
+.template-classic .mistake-box {
+  background-color: #fff8e1;
   border-radius: 8px;
   padding: 16px;
-  margin-top: 24px;
-  border: 1px solid var(--theme-border);
+  margin-bottom: 16px;
+  border-left: 4px solid #ff9800;
 }
 
-.template-classic .summary-box .summary-title {
+.template-classic .mistake-section {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.template-classic .mistake-label {
   font-weight: 700;
-  color: var(--theme-primary);
-  margin-bottom: 8px;
-}
-
-.template-classic .vocabulary-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.template-classic .vocabulary-list .vocab-item {
-  background-color: var(--theme-primary-light);
-  color: var(--theme-primary);
-  padding: 4px 12px;
-  border-radius: 16px;
   font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.template-classic .error-label {
+  color: #f44336;
+}
+
+.template-classic .correct-label {
+  color: #4caf50;
+}
+
+.template-classic .reason-label {
+  color: #ff9800;
+}
+
+.template-classic .mistake-wrong {
+  color: #f44336;
+  text-decoration: line-through;
+}
+
+.template-classic .mistake-correct {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.template-classic .mistake-reason {
+  color: var(--theme-text-secondary);
+  font-size: 14px;
+}
+
+/* 巩固练习 */
+.template-classic .practice-section .module-header {
+  background-color: #4caf50;
+}
+
+.template-classic .practice-level {
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: #f1f8e9;
+  border-radius: 8px;
+  border-left: 4px solid #4caf50;
+}
+
+.template-classic .practice-level-title {
+  font-weight: 700;
+  color: #4caf50;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.template-classic .practice-item {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.template-classic .practice-question {
+  color: var(--theme-text);
+  margin-bottom: 6px;
+}
+
+.template-classic .practice-answer {
+  font-size: 13px;
+  color: var(--theme-text-secondary);
+  background-color: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+/* 知识总结 */
+.template-classic .summary-section .module-header {
+  background-color: #9c27b0;
+}
+
+.template-classic .summary-section .module-content {
+  background-color: #f3e5f5;
+}
+
+.template-classic .summary-section p {
+  margin-bottom: 8px;
+  color: var(--theme-text);
+}
+
+.template-classic .summary-section strong {
+  color: #9c27b0;
+}
+
+/* 通用元素 */
+.template-classic .badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background-color: var(--theme-primary);
+  color: white;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.template-classic .divider {
+  height: 2px;
+  background: linear-gradient(90deg, var(--theme-gradient-start), var(--theme-gradient-end));
+  margin: 20px 0;
+  border-radius: 1px;
 }

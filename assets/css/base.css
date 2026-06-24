@@ -99,7 +99,9 @@ body {
 .input-section select,
 .input-group select,
 .input-group textarea,
-.input-group input[type="file"] {
+.input-group input[type="file"],
+.input-group input[type="text"],
+.input-group input[type="password"] {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--color-border);
@@ -111,7 +113,8 @@ body {
 
 .input-section select:focus,
 .input-group select:focus,
-.input-group textarea:focus {
+.input-group textarea:focus,
+.input-group input:focus {
   outline: none;
   border-color: var(--color-accent);
 }
@@ -120,6 +123,25 @@ body {
   resize: vertical;
   min-height: 80px;
   font-family: var(--font-sans);
+}
+
+/* 输入行/列布局 */
+.input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.input-col {
+  flex: 1;
+}
+
+.input-col label {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.input-col select {
+  width: 100%;
 }
 
 /* 级联选择器 */
@@ -143,7 +165,9 @@ body {
 /* 按钮 */
 .generate-btn,
 .refresh-btn,
-.export-btn {
+.export-btn,
+.preview-btn,
+.config-save-btn {
   width: 100%;
   padding: 12px;
   border: none;
@@ -388,10 +412,11 @@ body {
 /* 讲义页面 */
 .handout-page {
   width: 210mm;
-  min-height: 297mm;
+  height: 297mm;
+  max-height: 297mm;
   background-color: white;
   box-shadow: var(--shadow-lg);
-  padding: 20mm 15mm;
+  padding: 15mm 12mm;
   position: relative;
   overflow: hidden;
 }
@@ -477,11 +502,12 @@ body {
   
   .handout-page {
     width: 100%;
-    min-height: auto;
+    height: auto;
+    max-height: none;
     box-shadow: none;
     padding: 0;
-    page-break-after: always;
-    break-after: page;
+    page-break-after: avoid;
+    break-after: avoid;
     overflow: visible;
   }
   

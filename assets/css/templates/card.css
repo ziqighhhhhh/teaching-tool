@@ -1,158 +1,345 @@
-/* 知识卡片模板 */
+/* 卡片式模板 - 7 模块结构 */
 
 .template-card .handout-content {
   font-family: var(--font-sans);
-  line-height: 1.6;
+  line-height: 1.8;
   color: var(--theme-text);
 }
 
-.template-card .title {
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--theme-primary);
+.template-card .handout-header {
   text-align: center;
-  margin-bottom: 20px;
-  letter-spacing: -0.5px;
-}
-
-.template-card .card-container {
-  background-color: var(--theme-surface);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 2px solid var(--theme-border);
-}
-
-.template-card .core-concept {
-  background-color: var(--theme-primary);
-  color: white;
+  margin-bottom: 24px;
   padding: 20px;
+  background: linear-gradient(135deg, var(--theme-gradient-start), var(--theme-gradient-end));
   border-radius: 12px;
+  color: white;
+}
+
+.template-card .title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.template-card .meta-info {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.template-card .meta-item {
+  background-color: rgba(255,255,255,0.2);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* 卡片样式 */
+.template-card .card {
   margin-bottom: 20px;
-  text-align: center;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background-color: white;
 }
 
-.template-card .core-concept .concept-title {
-  font-size: 14px;
-  opacity: 0.9;
-  margin-bottom: 8px;
-}
-
-.template-card .core-concept .concept-text {
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.4;
-}
-
-.template-card .section-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--theme-primary);
-  margin-top: 20px;
-  margin-bottom: 10px;
+.template-card .card-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.template-card .section-title::before {
-  content: "";
-  display: inline-block;
-  width: 4px;
-  height: 20px;
+  gap: 10px;
+  padding: 14px 18px;
   background-color: var(--theme-primary);
-  border-radius: 2px;
+  color: white;
 }
 
-.template-card .point-list {
+.template-card .card-icon {
+  font-size: 20px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255,255,255,0.25);
+  border-radius: 8px;
+}
+
+.template-card .card-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.template-card .card-content {
+  padding: 18px;
+  background-color: var(--theme-surface);
+}
+
+/* 知识速览 */
+.template-card .knowledge-overview .card-header {
+  background-color: var(--theme-primary);
+}
+
+.template-card .knowledge-overview ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.template-card .point-list li {
+.template-card .knowledge-overview li {
   padding: 10px 0;
-  padding-left: 32px;
+  padding-left: 24px;
   position: relative;
   border-bottom: 1px solid var(--theme-border);
 }
 
-.template-card .point-list li:last-child {
+.template-card .knowledge-overview li:last-child {
   border-bottom: none;
 }
 
-.template-card .point-list li::before {
-  content: "•";
-  position: absolute;
-  left: 8px;
-  color: var(--theme-primary);
-  font-size: 20px;
-  line-height: 1;
-}
-
-.template-card .memory-tip {
-  background-color: var(--theme-secondary-light);
-  border-radius: 12px;
-  padding: 16px;
-  margin-top: 20px;
-  border-left: 4px solid var(--theme-secondary);
-}
-
-.template-card .memory-tip .tip-title {
-  font-weight: 700;
-  color: var(--theme-secondary);
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.template-card .formula-card {
-  background-color: var(--theme-bg);
-  border: 2px solid var(--theme-border);
-  border-radius: 12px;
-  padding: 20px;
-  margin: 16px 0;
-  text-align: center;
-}
-
-.template-card .formula-card .formula-text {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--theme-primary);
-  font-family: var(--font-serif);
-}
-
-.template-card .formula-card .formula-desc {
-  font-size: 13px;
-  color: var(--theme-text-secondary);
-  margin-top: 8px;
-}
-
-.template-card .quick-check {
-  background-color: var(--theme-highlight);
-  border-radius: 12px;
-  padding: 16px;
-  margin-top: 16px;
-}
-
-.template-card .quick-check .check-title {
-  font-weight: 700;
-  color: var(--theme-text);
-  margin-bottom: 10px;
-}
-
-.template-card .quick-check .check-item {
-  padding: 6px 0;
-  padding-left: 24px;
-  position: relative;
-  font-size: 14px;
-}
-
-.template-card .quick-check .check-item::before {
-  content: "?";
+.template-card .knowledge-overview li::before {
+  content: "●";
   position: absolute;
   left: 0;
   color: var(--theme-primary);
-  font-weight: bold;
+  font-size: 12px;
+}
+
+/* 重点精讲 */
+.template-card .key-explanation .card-header {
+  background-color: var(--theme-secondary);
+}
+
+.template-card .key-explanation p {
+  margin-bottom: 12px;
+  text-align: justify;
+}
+
+.template-card .key-explanation strong {
+  color: var(--theme-primary);
+}
+
+/* 典例分析 */
+.template-card .classic-examples .card-header {
+  background-color: var(--theme-primary);
+}
+
+.template-card .example-box {
+  background-color: var(--theme-primary-light);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-left: 4px solid var(--theme-primary);
+}
+
+.template-card .example-header {
+  font-weight: 700;
+  color: var(--theme-primary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.template-card .example-section {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.template-card .example-label {
+  font-weight: 700;
+  color: var(--theme-text-secondary);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.template-card .example-problem {
+  font-weight: 600;
+  color: var(--theme-text);
+}
+
+.template-card .example-solution {
+  color: var(--theme-text);
+}
+
+.template-card .example-answer {
+  background-color: var(--theme-secondary-light);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--theme-secondary);
+}
+
+.template-card .example-method {
+  font-size: 14px;
+  color: var(--theme-text-secondary);
+  font-style: italic;
+}
+
+/* 变式训练 */
+.template-card .variation-training .card-header {
+  background-color: var(--theme-secondary);
+}
+
+.template-card .variation-box {
+  background-color: var(--theme-secondary-light);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-left: 4px solid var(--theme-secondary);
+}
+
+.template-card .variation-header {
+  font-weight: 700;
+  color: var(--theme-secondary);
+  margin-bottom: 8px;
+}
+
+.template-card .variation-question {
+  margin-bottom: 8px;
+  color: var(--theme-text);
+}
+
+.template-card .variation-hint {
+  font-size: 13px;
+  color: var(--theme-text-secondary);
+  background-color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.template-card .hint-icon {
+  color: var(--theme-secondary);
+  font-weight: 600;
+}
+
+/* 易错警示 */
+.template-card .common-mistakes .card-header {
+  background-color: #ff9800;
+}
+
+.template-card .mistake-box {
+  background-color: #fff8e1;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-left: 4px solid #ff9800;
+}
+
+.template-card .mistake-section {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.template-card .mistake-label {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.template-card .error-label {
+  color: #f44336;
+}
+
+.template-card .correct-label {
+  color: #4caf50;
+}
+
+.template-card .reason-label {
+  color: #ff9800;
+}
+
+.template-card .mistake-wrong {
+  color: #f44336;
+  text-decoration: line-through;
+}
+
+.template-card .mistake-correct {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.template-card .mistake-reason {
+  color: var(--theme-text-secondary);
+  font-size: 14px;
+}
+
+/* 巩固练习 */
+.template-card .practice-section .card-header {
+  background-color: #4caf50;
+}
+
+.template-card .practice-level {
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: #f1f8e9;
+  border-radius: 8px;
+  border-left: 4px solid #4caf50;
+}
+
+.template-card .practice-level-title {
+  font-weight: 700;
+  color: #4caf50;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.template-card .practice-item {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.template-card .practice-question {
+  color: var(--theme-text);
+  margin-bottom: 6px;
+}
+
+.template-card .practice-answer {
+  font-size: 13px;
+  color: var(--theme-text-secondary);
+  background-color: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+/* 知识总结 */
+.template-card .summary-section .card-header {
+  background-color: #9c27b0;
+}
+
+.template-card .summary-section .card-content {
+  background-color: #f3e5f5;
+}
+
+.template-card .summary-section p {
+  margin-bottom: 8px;
+  color: var(--theme-text);
+}
+
+.template-card .summary-section strong {
+  color: #9c27b0;
+}
+
+/* 通用元素 */
+.template-card .badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background-color: var(--theme-primary);
+  color: white;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.template-card .divider {
+  height: 2px;
+  background: linear-gradient(90deg, var(--theme-gradient-start), var(--theme-gradient-end));
+  margin: 20px 0;
+  border-radius: 1px;
 }

@@ -1,138 +1,205 @@
-/* 思维导图模板 */
+/* 思维导图式模板 - 7 模块结构 */
 
 .template-mindmap .handout-content {
   font-family: var(--font-sans);
+  line-height: 1.8;
   color: var(--theme-text);
+}
+
+.template-mindmap .handout-header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 20px;
+  border: 3px solid var(--theme-primary);
+  border-radius: 12px;
+  background-color: var(--theme-primary-light);
 }
 
 .template-mindmap .title {
   font-size: 28px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--theme-primary);
-  text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 12px;
 }
 
-.template-mindmap .mindmap-container {
-  position: relative;
-  min-height: 400px;
+.template-mindmap .meta-info {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
 }
 
-.template-mindmap .center-node {
+.template-mindmap .meta-item {
   background-color: var(--theme-primary);
   color: white;
-  padding: 20px 30px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 700;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  z-index: 10;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-.template-mindmap .branch {
-  position: relative;
-  margin-left: 60px;
+/* 思维导图分支样式 */
+.template-mindmap .mindmap-section {
   margin-bottom: 20px;
+  padding-left: 20px;
+  border-left: 4px solid var(--theme-primary);
+  position: relative;
 }
 
-.template-mindmap .branch::before {
+.template-mindmap .mindmap-section::before {
   content: "";
   position: absolute;
-  left: -40px;
-  top: 20px;
-  width: 30px;
-  height: 2px;
+  left: -8px;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  background-color: var(--theme-primary);
+  border-radius: 50%;
+}
+
+.template-mindmap .section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background-color: var(--theme-primary);
+  color: white;
+  border-radius: 8px;
+}
+
+.template-mindmap .section-icon {
+  font-size: 18px;
+}
+
+.template-mindmap .section-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.template-mindmap .section-content {
+  padding: 12px 16px;
+  background-color: var(--theme-surface);
+  border-radius: 8px;
+}
+
+/* 知识速览 */
+.template-mindmap .knowledge-overview {
+  border-left-color: var(--theme-primary);
+}
+
+.template-mindmap .knowledge-overview::before {
   background-color: var(--theme-primary);
 }
 
-.template-mindmap .branch-node {
-  background-color: var(--theme-primary-light);
-  color: var(--theme-primary);
-  padding: 12px 20px;
-  border-radius: 24px;
-  font-weight: 700;
-  display: inline-block;
-  margin-bottom: 10px;
-  border: 2px solid var(--theme-primary);
+.template-mindmap .knowledge-overview .section-header {
+  background-color: var(--theme-primary);
 }
 
-.template-mindmap .sub-branch {
-  margin-left: 30px;
-  padding-left: 20px;
-  border-left: 2px solid var(--theme-border);
-}
-
-.template-mindmap .sub-node {
-  background-color: var(--theme-surface);
-  color: var(--theme-text);
-  padding: 8px 16px;
-  border-radius: 16px;
-  display: inline-block;
-  margin: 4px 0;
-  border: 1px solid var(--theme-border);
-  font-size: 14px;
-}
-
-.template-mindmap .detail-node {
-  background-color: var(--theme-highlight);
-  color: var(--theme-text-secondary);
-  padding: 6px 12px;
-  border-radius: 12px;
-  display: inline-block;
-  margin: 2px 0;
-  font-size: 13px;
-}
-
-/* 线性布局（用于打印） */
-.template-mindmap .linear-layout .center-node {
-  position: relative;
-  left: auto;
-  top: auto;
-  transform: none;
-  border-radius: 16px;
-  margin-bottom: 20px;
-}
-
-.template-mindmap .linear-layout .branch {
-  margin-left: 20px;
-}
-
-.template-mindmap .linear-layout .branch::before {
-  display: none;
-}
-
-.template-mindmap .hierarchy-list {
+.template-mindmap .knowledge-overview ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
-.template-mindmap .hierarchy-list .level-1 {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--theme-primary);
-  margin: 16px 0 8px;
+.template-mindmap .knowledge-overview li {
   padding: 8px 0;
-  border-bottom: 2px solid var(--theme-primary);
+  padding-left: 20px;
+  position: relative;
 }
 
-.template-mindmap .hierarchy-list .level-2 {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--theme-text);
-  margin: 10px 0 6px 20px;
-  padding: 4px 0;
+.template-mindmap .knowledge-overview li::before {
+  content: "◆";
+  position: absolute;
+  left: 0;
+  color: var(--theme-primary);
+  font-size: 10px;
 }
 
-.template-mindmap .hierarchy-list .level-3 {
-  font-size: 14px;
-  color: var(--theme-text-secondary);
-  margin: 4px 0 4px 40px;
-  padding: 2px 0;
+/* 重点精讲 */
+.template-mindmap .key-explanation {
+  border-left-color: var(--theme-secondary);
+}
+
+.template-mindmap .key-explanation::before {
+  background-color: var(--theme-secondary);
+}
+
+.template-mindmap .key-explanation .section-header {
+  background-color: var(--theme-secondary);
+}
+
+.template-mindmap .key-explanation p {
+  margin-bottom: 10px;
+}
+
+/* 典例分析 */
+.template-mindmap .classic-examples {
+  border-left-color: var(--theme-primary);
+}
+
+.template-mindmap .classic-examples::before {
+  background-color: var(--theme-primary);
+}
+
+.template-mindmap .classic-examples .section-header {
+  background-color: var(--theme-primary);
+}
+
+/* 变式训练 */
+.template-mindmap .variation-training {
+  border-left-color: var(--theme-secondary);
+}
+
+.template-mindmap .variation-training::before {
+  background-color: var(--theme-secondary);
+}
+
+.template-mindmap .variation-training .section-header {
+  background-color: var(--theme-secondary);
+}
+
+/* 易错警示 */
+.template-mindmap .common-mistakes {
+  border-left-color: #ff9800;
+}
+
+.template-mindmap .common-mistakes::before {
+  background-color: #ff9800;
+}
+
+.template-mindmap .common-mistakes .section-header {
+  background-color: #ff9800;
+}
+
+/* 巩固练习 */
+.template-mindmap .practice-section {
+  border-left-color: #4caf50;
+}
+
+.template-mindmap .practice-section::before {
+  background-color: #4caf50;
+}
+
+.template-mindmap .practice-section .section-header {
+  background-color: #4caf50;
+}
+
+/* 知识总结 */
+.template-mindmap .summary-section {
+  border-left-color: #9c27b0;
+}
+
+.template-mindmap .summary-section::before {
+  background-color: #9c27b0;
+}
+
+.template-mindmap .summary-section .section-header {
+  background-color: #9c27b0;
+}
+
+.template-mindmap .divider {
+  height: 2px;
+  background: linear-gradient(90deg, var(--theme-gradient-start), var(--theme-gradient-end));
+  margin: 20px 0;
+  border-radius: 1px;
 }

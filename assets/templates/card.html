@@ -1,44 +1,90 @@
 <div class="template-card">
   <div class="handout-content">
-    <h1 class="title">{{topic}}</h1>
+    <div class="handout-header">
+      <h1 class="title">{{topic}}</h1>
+      <div class="meta-info">
+        <span class="meta-item">{{subject}}</span>
+        <span class="meta-item">{{grade}}</span>
+        <span class="meta-item">{{difficulty}}</span>
+      </div>
+    </div>
     
-    <div class="card-container">
-      <div class="core-concept">
-        <div class="concept-title">核心概念</div>
-        <div class="concept-text">{{topic}}</div>
+    <div class="divider"></div>
+    
+    <!-- 知识速览 -->
+    <div class="card knowledge-overview">
+      <div class="card-header">
+        <div class="card-icon">★</div>
+        <div class="card-title">知识速览</div>
       </div>
-      
-      <div class="section-title">定义</div>
-      <div class="introduction">
-        {{introduction}}
+      <div class="card-content">
+        {{knowledge_overview}}
       </div>
-      
-      <div class="section-title">关键要点</div>
-      <div class="point-list">
-        {{keyPoints}}
+    </div>
+    
+    <!-- 重点精讲 -->
+    <div class="card key-explanation">
+      <div class="card-header">
+        <div class="card-icon">▶</div>
+        <div class="card-title">重点精讲</div>
       </div>
-      
-      <div class="section-title">核心公式</div>
-      <div class="formula-card">
-        <div class="formula-text">{{formula}}</div>
-        <div class="formula-desc">{{formulaDesc}}</div>
+      <div class="card-content">
+        {{key_explanation}}
       </div>
-      
-      <div class="section-title">例题</div>
-      <div class="examples">
-        {{examples}}
+    </div>
+    
+    <!-- 典例分析 -->
+    <div class="card classic-examples">
+      <div class="card-header">
+        <div class="card-icon">●</div>
+        <div class="card-title">典例分析</div>
       </div>
-      
-      <div class="memory-tip">
-        <div class="tip-title">记忆口诀</div>
-        <div>{{summary}}</div>
+      <div class="card-content">
+        {{classic_examples}}
       </div>
-      
-      <div class="quick-check">
-        <div class="check-title">快速检测</div>
-        <div class="check-items">
-          {{practice}}
-        </div>
+    </div>
+    
+    <!-- 变式训练 -->
+    <div class="card variation-training">
+      <div class="card-header">
+        <div class="card-icon">◆</div>
+        <div class="card-title">变式训练</div>
+      </div>
+      <div class="card-content">
+        {{variation_training}}
+      </div>
+    </div>
+    
+    <!-- 易错警示 -->
+    <div class="card common-mistakes">
+      <div class="card-header">
+        <div class="card-icon">⚠</div>
+        <div class="card-title">易错警示</div>
+      </div>
+      <div class="card-content">
+        {{common_mistakes}}
+      </div>
+    </div>
+    
+    <!-- 巩固练习 -->
+    <div class="card practice-section">
+      <div class="card-header">
+        <div class="card-icon">✎</div>
+        <div class="card-title">巩固练习</div>
+      </div>
+      <div class="card-content">
+        {{practice}}
+      </div>
+    </div>
+    
+    <!-- 知识总结 -->
+    <div class="card summary-section">
+      <div class="card-header">
+        <div class="card-icon">◉</div>
+        <div class="card-title">知识总结</div>
+      </div>
+      <div class="card-content">
+        {{summary}}
       </div>
     </div>
   </div>

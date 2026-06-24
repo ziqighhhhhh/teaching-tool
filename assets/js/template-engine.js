@@ -25,7 +25,6 @@ const TemplateEngine = {
       return html;
     } catch (error) {
       console.warn('Failed to load template:', error);
-      // 返回默认模板
       return this.getDefaultTemplate();
     }
   },
@@ -87,22 +86,15 @@ const TemplateEngine = {
       subject: data.subject || '学科',
       grade: data.grade || '年级',
       difficulty: this.translateDifficulty(data.difficulty || '基础'),
-      introduction: this.formatText(data.introduction || ''),
-      explanation: this.formatText(data.explanation || ''),
-      summary: this.formatText(data.summary || ''),
-      keyVocabulary: this.formatVocabulary(data.keyVocabulary || []),
-      commonMisconceptions: this.formatMisconceptions(data.commonMisconceptions || []),
-      learningObjectives: this.formatObjectives(data.learningObjectives || []),
-      keyPoints: this.formatKeyPoints(data.keyPoints || []),
-      difficultPoints: this.formatList(data.difficultPoints || []),
-      examples: this.formatExamples(data.examples || []),
-      practice: this.formatPractice(data.practice || []),
-      // 特定模板字段
-      formula: data.formula || '暂无公式',
-      formulaDesc: data.formulaDesc || '',
-      answer: data.answer || '详见解析',
-      discussion: data.discussion || '请讨论本节课的核心问题',
-      materials: data.materials || '根据实验内容准备相应材料'
+      
+      // 7 模块结构
+      knowledge_overview: data.knowledge_overview || '<p>暂无知识速览内容</p>',
+      key_explanation: data.key_explanation || '<p>暂无重点精讲内容</p>',
+      classic_examples: this.formatClassicExamples(data.classic_examples || []),
+      variation_training: this.formatVariationTraining(data.variation_training || []),
+      common_mistakes: this.formatCommonMistakes(data.common_mistakes || []),
+      practice: this.formatPractice(data.practice || { basic: [], advanced: [], extension: [] }),
+      summary: data.summary || '<p>暂无总结内容</p>'
     };
 
     return result;
@@ -126,57 +118,11 @@ const TemplateEngine = {
   },
 
   /**
-   * 格式化文本
-   * @param {string} text - 文本
-   * @returns {string}
-   */
-  formatText(text) {
-    if (!text) return '<p>暂无内容</p>';
-    
-    // 将换行转为段落
-    return text
-      .split('\n\n')
-      .filter(p => p.trim())
-      .map(p => `<p>${p.trim()}</p>`)
-      .join('');
-  },
-
-  /**
-   * 格式化列表
-   * @param {array} items - 列表项
-   * @returns {string}
-   */
-  formatList(items) {
-    if (!items || items.length === 0) return '<p>暂无</p>';
-    return `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
-  },
-
-  /**
-   * 格式化核心词汇
-   * @param {array} items - 词汇列表
-   * @returns {string}
-   */
-  formatVocabulary(items) {
-    if (!items || items.length === 0) return '<span class="vocab-item">暂无</span>';
-    return items.map(item => `<span class="vocab-item">${item}</span>`).join('');
-  },
-
-  /**
-   * 格式化重点知识
-   * @param {array} items - 重点列表
-   * @returns {string}
-   */
-  formatKeyPoints(items) {
-    if (!items || items.length === 0) return '<ul class="key-point-list"><li>暂无</li></ul>';
-    return `<ul class="key-point-list">${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
-  },
-
-  /**
-   * 格式化例题
+   * 格式化典例分析
    * @param {array} examples - 例题列表
    * @returns {string}
    */
-  formatExamples(examples) {
+  formatClassicExamples(examples) {
     if (!examples || examples.length === 0) return '<p>暂无例题</p>';
     
     return examples.map((ex, i) => `
@@ -185,69 +131,130 @@ const TemplateEngine = {
           <span class="badge">例题 ${i + 1}</span>
           <span class="example-title">${ex.title || ''}</span>
         </div>
-        <div class="example-problem">
-          <strong>题目：</strong>${ex.problem || ''}
+        <div class="example-section">
+          <div class="example-label">题目</div>
+          <div class="example-problem">${ex.problem || ''}</div>
         </div>
-        <div class="example-solution">
-          <strong>解答：</strong>${ex.solution || ''}
+        <div class="example-section">
+          <div class="example-label">分析</div>
+          <div class="example-analysis">${ex.analysis || ''}</div>
         </div>
-        <div class="example-answer">
-          <strong>答案：</strong>${ex.answer || ''}
+        <div class="example-section">
+          <div class="example-label">解答</div>
+          <div class="example-solution">${ex.solution || ''}</div>
+        </div>
+        <div class="example-section">
+          <div class="example-label">答案</div>
+          <div class="example-answer">${ex.answer || ''}</div>
+        </div>
+        <div class="example-section">
+          <div class="example-label">方法总结</div>
+          <div class="example-method">${ex.method_summary || ''}</div>
         </div>
       </div>
     `).join('');
   },
 
   /**
-   * 格式化练习题
-   * @param {array} practice - 练习题列表
+   * 格式化变式训练
+   * @param {array} variations - 变式题列表
+   * @returns {string}
+   */
+  formatVariationTraining(variations) {
+    if (!variations || variations.length === 0) return '<p>暂无变式训练</p>';
+    
+    return variations.map((q, i) => `
+      <div class="variation-box">
+        <div class="variation-header">
+          <span class="badge">变式 ${i + 1}</span>
+        </div>
+        <div class="variation-question">${q.question || ''}</div>
+        <div class="variation-hint">
+          <span class="hint-icon">提示：</span>${q.hint || ''}
+        </div>
+      </div>
+    `).join('');
+  },
+
+  /**
+   * 格式化易错警示
+   * @param {array} mistakes - 错误列表
+   * @returns {string}
+   */
+  formatCommonMistakes(mistakes) {
+    if (!mistakes || mistakes.length === 0) return '<p>暂无易错警示</p>';
+    
+    return mistakes.map(m => `
+      <div class="mistake-box">
+        <div class="mistake-section">
+          <div class="mistake-label error-label">常见错误</div>
+          <div class="mistake-wrong">${m.wrong || ''}</div>
+        </div>
+        <div class="mistake-section">
+          <div class="mistake-label correct-label">正确做法</div>
+          <div class="mistake-correct">${m.correct || ''}</div>
+        </div>
+        <div class="mistake-section">
+          <div class="mistake-label reason-label">原因分析</div>
+          <div class="mistake-reason">${m.reason || ''}</div>
+        </div>
+      </div>
+    `).join('');
+  },
+
+  /**
+   * 格式化巩固练习
+   * @param {object} practice - 练习数据
    * @returns {string}
    */
   formatPractice(practice) {
-    if (!practice || practice.length === 0) return '<p>暂无练习题</p>';
+    if (!practice) return '<p>暂无练习</p>';
     
-    return practice.map((q, i) => `
-      <div class="practice-box">
-        <div class="practice-header">
-          <span class="badge">练习 ${i + 1}</span>
-        </div>
-        <div class="practice-question">${q.question || ''}</div>
-        <div class="practice-hint">
-          <span class="callout-icon">提示：</span>${q.hint || ''}
-        </div>
-        <div class="practice-answer">
-          <span class="callout-icon">答案：</span>${q.answer || ''}
-        </div>
-      </div>
-    `).join('');
-  },
-
-  /**
-   * 格式化常见误解
-   * @param {array} misconceptions - 误解列表
-   * @returns {string}
-   */
-  formatMisconceptions(misconceptions) {
-    if (!misconceptions || misconceptions.length === 0) return '<p>暂无</p>';
+    let html = '';
     
-    return misconceptions.map(m => `
-      <div class="callout">
-        <div><span class="callout-icon">常见误解：</span>${m.misconception || ''}</div>
-        <div><span class="callout-icon">正确理解：</span>${m.correction || ''}</div>
-        <div><span class="callout-icon">解释：</span>${m.explanation || ''}</div>
-      </div>
-    `).join('');
-  },
-
-  /**
-   * 格式化学习目标
-   * @param {array} objectives - 目标列表
-   * @returns {string}
-   */
-  formatObjectives(objectives) {
-    if (!objectives || objectives.length === 0) return '<ul class="objective-list"><li>暂无</li></ul>';
+    // 基础题
+    if (practice.basic && practice.basic.length > 0) {
+      html += '<div class="practice-level"><div class="practice-level-title">基础巩固</div>';
+      practice.basic.forEach((q, i) => {
+        html += `
+          <div class="practice-item">
+            <div class="practice-question">${i + 1}. ${q.question || ''}</div>
+            <div class="practice-answer">答案：${q.answer || ''}</div>
+          </div>
+        `;
+      });
+      html += '</div>';
+    }
     
-    return `<ul class="objective-list">${objectives.map(obj => `<li>${obj}</li>`).join('')}</ul>`;
+    // 提高题
+    if (practice.advanced && practice.advanced.length > 0) {
+      html += '<div class="practice-level"><div class="practice-level-title">能力提升</div>';
+      practice.advanced.forEach((q, i) => {
+        html += `
+          <div class="practice-item">
+            <div class="practice-question">${i + 1}. ${q.question || ''}</div>
+            <div class="practice-answer">答案：${q.answer || ''}</div>
+          </div>
+        `;
+      });
+      html += '</div>';
+    }
+    
+    // 拓展题
+    if (practice.extension && practice.extension.length > 0) {
+      html += '<div class="practice-level"><div class="practice-level-title">拓展探究</div>';
+      practice.extension.forEach((q, i) => {
+        html += `
+          <div class="practice-item">
+            <div class="practice-question">${i + 1}. ${q.question || ''}</div>
+            <div class="practice-answer">答案：${q.answer || ''}</div>
+          </div>
+        `;
+      });
+      html += '</div>';
+    }
+    
+    return html || '<p>暂无练习</p>';
   }
 };
 

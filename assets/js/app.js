@@ -9,7 +9,6 @@ const App = {
     currentTemplate: 'classic',
     currentTheme: 'blue',
     currentDifficulty: 'basic',
-    inputMode: 'text',
     isGenerating: false,
     lastGeneratedData: null,
     demoMode: false  // 演示模式（无 API 时使用 mock 数据）
@@ -25,23 +24,10 @@ const App = {
     // 绑定事件
     this.bindEvents();
     
-    // 加载教科书索引
-    await TextbookAdapter.loadIndex();
-    this.populateTextbookSelectors();
-    
-    // 加载缓存统计
-    this.updateCacheInfo();
-    
-    // 检查 API 配置
-    if (!SkillCaller.isConfigured()) {
-      this.state.demoMode = true;
-      this.showConfigNotice();
-    }
-    
     // 初始化编辑器
     Editor.init('handout-content', 'editor-toolbar', 'preview-container');
     
-    console.log('App initialized. Demo mode:', this.state.demoMode);
+    console.log('App initialized');
   },
 
   /**
@@ -50,19 +36,8 @@ const App = {
   bindElements() {
     this.elements = {
       // 输入控制
-      inputMode: document.getElementById('input-mode'),
-      textInputGroup: document.getElementById('text-input-group'),
-      textbookInputGroup: document.getElementById('textbook-input-group'),
-      uploadInputGroup: document.getElementById('upload-input-group'),
       topicInput: document.getElementById('topic-input'),
-      fileUpload: document.getElementById('file-upload'),
-      
-      // 教科书选择器
-      subjectSelect: document.getElementById('subject-select'),
-      gradeSelect: document.getElementById('grade-select'),
-      textbookSelect: document.getElementById('textbook-select'),
-      chapterSelect: document.getElementById('chapter-select'),
-      sectionSelect: document.getElementById('section-select'),
+      gradeManual: document.getElementById('grade-manual'),
       
       // 配置选项
       templateSelect: document.getElementById('template-select'),
@@ -77,8 +52,7 @@ const App = {
       // 编辑预览
       handoutContent: document.getElementById('handout-content'),
       loadingOverlay: document.getElementById('loading-overlay'),
-      statusBar: document.getElementById('status-bar'),
-      cacheInfo: document.getElementById('cache-info')
+      statusBar: document.getElementById('status-bar')
     };
   },
 
@@ -87,38 +61,6 @@ const App = {
    */
   bindEvents() {
     const { elements } = this;
-    
-    // 输入模式切换
-    elements.inputMode.addEventListener('change', (e) => {
-      this.switchInputMode(e.target.value);
-    });
-    
-    // API 配置折叠
-    const configToggle = document.querySelector('.config-toggle-label');
-    if (configToggle) {
-      configToggle.addEventListener('click', () => {
-        const configContent = document.getElementById('api-config-content');
-        if (configContent) {
-          configContent.classList.toggle('hidden');
-        }
-      });
-    }
-    
-    // 保存 API 配置
-    const saveConfigBtn = document.getElementById('save-config-btn');
-    if (saveConfigBtn) {
-      saveConfigBtn.addEventListener('click', () => {
-        this.saveAPIConfig();
-      });
-    }
-    
-    // 清理缓存
-    const clearCacheBtn = document.getElementById('clear-cache-btn');
-    if (clearCacheBtn) {
-      clearCacheBtn.addEventListener('click', () => {
-        this.clearCache();
-      });
-    }
     
     // 生成按钮
     elements.generateBtn.addEventListener('click', () => {
@@ -155,17 +97,6 @@ const App = {
     elements.difficultySelect.addEventListener('change', (e) => {
       this.state.currentDifficulty = e.target.value;
     });
-    
-    // 文件上传
-    elements.fileUpload.addEventListener('change', (e) => {
-      this.handleFileUpload(e.target.files[0]);
-    });
-    
-    // 教科书选择器级联
-    elements.subjectSelect.addEventListener('change', () => this.updateTextbookOptions());
-    elements.gradeSelect.addEventListener('change', () => this.updateTextbookOptions());
-    elements.textbookSelect.addEventListener('change', () => this.updateChapterOptions());
-    elements.chapterSelect.addEventListener('change', () => this.updateSectionOptions());
   },
 
   /**
@@ -266,8 +197,8 @@ const App = {
     if (this.state.isGenerating) return;
     
     // 获取输入内容
-    const topic = await this.getInputContent();
-    if (!topic) {
+    const inputData = await this.getInputContent();
+    if (!inputData) {
       alert('请输入知识点或选择章节');
       return;
     }
@@ -282,7 +213,7 @@ const App = {
         difficulty: this.state.currentDifficulty
       };
       
-      const cacheKey = await CacheManager.generateKey(topic, config);
+      const cacheKey = await CacheManager.generateKey(inputData.topic + inputData.grade, config);
       
       if (!forceRefresh) {
         const cached = CacheManager.get(cacheKey);
@@ -298,9 +229,8 @@ const App = {
       
       // 调用本地 API 生成
       console.log('Generating handout...');
-      const data = await this.callLocalAPI(topic, {
-        subject: this.elements.subjectSelect.value,
-        grade: this.elements.gradeSelect.value,
+      const data = await this.callLocalAPI(inputData.topic, {
+        grade: inputData.grade,
         difficulty: this.state.currentDifficulty
       });
       
@@ -320,14 +250,14 @@ const App = {
       // 如果 API 失败，使用演示模式
       console.log('API failed, falling back to demo mode...');
       try {
-        const data = this.generateMockData(topic);
-        const html = await this.renderHandout(data);
         const fallbackConfig = {
           template: this.state.currentTemplate,
           theme: this.state.currentTheme,
           difficulty: this.state.currentDifficulty
         };
-        CacheManager.set(await CacheManager.generateKey(topic, fallbackConfig), {
+        const data = this.generateMockData(inputData.topic, '数学', inputData.grade);
+        const html = await this.renderHandout(data);
+        CacheManager.set(await CacheManager.generateKey(inputData.topic + inputData.grade, fallbackConfig), {
           html,
           structuredData: data,
           skillVersion: '1.0'
@@ -356,7 +286,6 @@ const App = {
       },
       body: JSON.stringify({
         topic: topic,
-        subject: options.subject || '',
         grade: options.grade || '',
         difficulty: options.difficulty || 'basic'
       })
@@ -374,81 +303,93 @@ const App = {
   /**
    * 生成演示数据（mock）
    * @param {string} topic - 知识点
+   * @param {string} subject - 学科
+   * @param {string} grade - 年级
    * @returns {object} - 演示数据
    */
-  generateMockData(topic) {
-    return {
+  generateMockData(topic, subject = '数学', grade = '七年级') {
+    const data = {
       topic: topic,
-      subject: this.elements.subjectSelect.value || '数学',
-      grade: this.elements.gradeSelect.value || '七年级',
+      subject: subject,
+      grade: grade,
       difficulty: this.state.currentDifficulty,
-      introduction: `本节课我们将学习"${topic}"的相关知识。这是学科中的重要概念，在日常生活和后续学习中都有广泛应用。`,
-      explanation: `${topic}的核心概念包括：\n\n1. 定义与性质：理解${topic}的基本定义，掌握其本质特征。\n\n2. 关键公式：牢记相关公式，并能灵活运用。\n\n3. 应用场景：能够将所学知识应用于实际问题中。\n\n学习${topic}时，建议从具体实例出发，逐步抽象到一般规律，再通过练习巩固理解。`,
-      summary: `通过本节课的学习，我们掌握了${topic}的核心概念和应用方法。重点在于理解定义、掌握公式、灵活应用。建议课后及时复习，完成相关练习。`,
-      keyPoints: [
-        `掌握${topic}的基本定义`,
-        `理解${topic}的核心性质`,
-        `能够运用${topic}解决简单问题`
-      ],
-      difficultPoints: [
-        `理解${topic}的抽象概念`,
-        `灵活运用${topic}解决复杂问题`
-      ],
-      learningObjectives: [
-        `能够准确表述${topic}的定义`,
-        `能够运用${topic}的性质进行判断`,
-        `能够解决与${topic}相关的实际问题`
-      ],
-      keyVocabulary: [topic, '定义', '性质', '应用'],
-      examples: [
+      knowledge_overview: '<ul><li><strong>核心概念：</strong>{{topic}}是{{subject}}学科的重要知识点</li><li><strong>基本要求：</strong>理解{{topic}}的定义和基本性质</li><li><strong>应用目标：</strong>能够运用{{topic}}解决简单问题</li></ul>',
+      key_explanation: '<p><strong>一、定义与概念</strong></p><p>{{topic}}是指在特定条件下形成的一种数学关系。理解这个定义的关键在于把握其构成要素和适用条件。</p><p><strong>二、核心性质</strong></p><p>1. 基本性质：满足特定条件时成立</p><p>2. 推导关系：可以通过已知条件推导得出</p><p>3. 应用范围：适用于特定类型的题目</p><p><strong>三、学习要点</strong></p><p>学习{{topic}}时，建议先理解概念本质，再通过例题掌握应用方法，最后通过练习巩固。</p>',
+      classic_examples: [
         {
           title: '基础例题',
-          problem: `已知条件，求${topic}的相关值。`,
-          solution: '根据定义和已知条件，逐步推导...',
-          answer: '最终结果'
+          problem: '已知条件，求{{topic}}的相关值。',
+          analysis: '首先分析题目给出的条件，找出与{{topic}}相关的信息。',
+          solution: '第一步：理解题意，提取已知条件；第二步：运用{{topic}}的相关性质；第三步：逐步推导计算。',
+          answer: '最终结果：根据具体计算得出',
+          method_summary: '通过本题掌握{{topic}}的基本应用方法'
         }
       ],
-      practice: [
+      variation_training: [
+        { question: '变式1：改变条件，求{{topic}}的另一种情况', hint: '注意条件变化对结果的影响' },
+        { question: '变式2：结合实际情境，应用{{topic}}', hint: '将抽象概念与实际联系起来' },
+        { question: '变式3：综合多个知识点，运用{{topic}}', hint: '注意与其他知识点的结合' }
+      ],
+      common_mistakes: [
         {
-          question: `请判断以下说法是否正确，并说明理由。`,
-          hint: '回顾定义和性质',
-          answer: '正确。根据定义...'
+          wrong: '忽略{{topic}}的适用条件，直接套用公式',
+          correct: '先判断条件是否满足，再选择合适的方法',
+          reason: '每个概念都有其适用范围，必须注意前提条件'
         }
       ],
-      commonMisconceptions: [
-        {
-          misconception: '容易混淆相关概念',
-          correction: '应准确区分不同概念',
-          explanation: '理解本质区别...'
-        }
-      ]
+      practice: {
+        basic: [
+          { question: '基础练习1：判断{{topic}}的基本概念', answer: '解析：根据定义判断...' },
+          { question: '基础练习2：简单应用{{topic}}解决问题', answer: '解析：直接套用公式...' },
+          { question: '基础练习3：{{topic}}的基本计算', answer: '解析：按步骤计算...' }
+        ],
+        advanced: [
+          { question: '提高练习1：{{topic}}的灵活应用', answer: '解析：需要转换思路...' },
+          { question: '提高练习2：结合其他知识运用{{topic}}', answer: '解析：综合运用多个知识点...' }
+        ],
+        extension: [
+          { question: '拓展练习：{{topic}}的深入探究', answer: '解析：需要更深入理解...' }
+        ]
+      },
+      summary: '<p><strong>知识网络：</strong>{{topic}}与前后知识的联系</p><p><strong>核心要点：</strong>掌握定义、性质、应用方法</p><p><strong>学习方法：</strong>理解概念→掌握例题→变式训练→总结反思</p>'
     };
+    
+    // 递归替换占位符
+    const replacePlaceholders = (obj) => {
+      if (typeof obj === 'string') {
+        return obj
+          .replace(/{{topic}}/g, topic)
+          .replace(/{{subject}}/g, subject)
+          .replace(/{{grade}}/g, grade);
+      }
+      if (Array.isArray(obj)) {
+        return obj.map(replacePlaceholders);
+      }
+      if (typeof obj === 'object' && obj !== null) {
+        const result = {};
+        for (const [key, value] of Object.entries(obj)) {
+          result[key] = replacePlaceholders(value);
+        }
+        return result;
+      }
+      return obj;
+    };
+    
+    return replacePlaceholders(data);
   },
 
   /**
    * 获取输入内容
-   * @returns {Promise<string>}
+   * @returns {Promise<object>}
    */
   async getInputContent() {
-    const { inputMode } = this.state;
+    const topic = this.elements.topicInput.value.trim();
+    if (!topic) return null;
     
-    if (inputMode === 'text') {
-      return this.elements.topicInput.value.trim();
-    } else if (inputMode === 'textbook') {
-      const textbookId = this.elements.textbookSelect.value;
-      const chapterIndex = this.elements.chapterSelect.value;
-      const sectionIndex = this.elements.sectionSelect.value;
-      
-      if (textbookId && chapterIndex !== '' && sectionIndex !== '') {
-        return await TextbookAdapter.generateTopicDescription(
-          textbookId, chapterIndex, sectionIndex
-        );
-      }
-    } else if (inputMode === 'upload') {
-      return this.elements.topicInput.value.trim();
-    }
-    
-    return '';
+    return {
+      topic: topic,
+      grade: this.elements.gradeManual?.value || '七年级'
+    };
   },
 
   /**
@@ -487,69 +428,17 @@ const App = {
   },
 
   /**
-   * 处理文件上传
-   * @param {File} file - 文件
-   */
-  async handleFileUpload(file) {
-    if (!file) return;
-    
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.elements.topicInput.value = e.target.result;
-    };
-    
-    if (file.type === 'text/plain' || file.name.endsWith('.md')) {
-      reader.readAsText(file);
-    } else {
-      alert('PDF/Word 文件解析需要后端支持，当前版本仅支持文本文件');
-    }
-  },
-
-  /**
-   * 更新缓存信息
-   */
-  updateCacheInfo() {
-    const stats = CacheManager.getStats();
-    this.elements.cacheInfo.textContent = `缓存: ${stats.count} 条 (${stats.totalSize})`;
-  },
-
-  /**
-   * 保存 API 配置
-   */
-  saveAPIConfig() {
-    const endpoint = document.getElementById('api-endpoint')?.value?.trim();
-    const key = document.getElementById('api-key')?.value?.trim();
-    const model = document.getElementById('api-model')?.value || 'gpt-4';
-    
-    if (endpoint && key) {
-      SkillCaller.updateConfig({
-        apiEndpoint: endpoint,
-        apiKey: key,
-        model: model
-      });
-      this.state.demoMode = false;
-      alert('API 配置已保存！');
-    } else {
-      alert('请输入 API 端点和密钥');
-    }
-  },
-
-  /**
-   * 清理缓存
-   */
-  clearCache() {
-    if (confirm('确定要清理所有缓存吗？')) {
-      CacheManager.clearAll();
-      this.updateCacheInfo();
-      alert('缓存已清理！');
-    }
-  },
-
-  /**
    * 显示配置提示
    */
   showConfigNotice() {
     console.log('API not configured. Running in demo mode with mock data.');
+  },
+
+  /**
+   * 更新缓存信息（已隐藏，保留方法避免报错）
+   */
+  updateCacheInfo() {
+    // 缓存管理已隐藏，此方法保留以避免报错
   }
 };
 

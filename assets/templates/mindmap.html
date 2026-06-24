@@ -1,26 +1,90 @@
 <div class="template-mindmap">
   <div class="handout-content">
-    <h1 class="title">{{topic}} 知识图谱</h1>
+    <div class="handout-header">
+      <h1 class="title">{{topic}}</h1>
+      <div class="meta-info">
+        <span class="meta-item">{{subject}}</span>
+        <span class="meta-item">{{grade}}</span>
+        <span class="meta-item">{{difficulty}}</span>
+      </div>
+    </div>
     
-    <div class="linear-layout">
-      <div class="center-node">{{topic}}</div>
-      
-      <div class="hierarchy-list">
-        <div class="level-1">核心概念</div>
-        <div class="level-2">{{introduction}}</div>
-        <div class="level-2">{{explanation}}</div>
-        
-        <div class="level-1">重点知识</div>
-        <div class="level-2">{{keyPoints}}</div>
-        
-        <div class="level-1">典型例题</div>
-        <div class="level-2">{{examples}}</div>
-        
-        <div class="level-1">常见误区</div>
-        <div class="level-2">{{commonMisconceptions}}</div>
-        
-        <div class="level-1">知识总结</div>
-        <div class="level-2">{{summary}}</div>
+    <div class="divider"></div>
+    
+    <!-- 知识速览 -->
+    <div class="mindmap-section knowledge-overview">
+      <div class="section-header">
+        <div class="section-icon">★</div>
+        <div class="section-title">知识速览</div>
+      </div>
+      <div class="section-content">
+        {{knowledge_overview}}
+      </div>
+    </div>
+    
+    <!-- 重点精讲 -->
+    <div class="mindmap-section key-explanation">
+      <div class="section-header">
+        <div class="section-icon">▶</div>
+        <div class="section-title">重点精讲</div>
+      </div>
+      <div class="section-content">
+        {{key_explanation}}
+      </div>
+    </div>
+    
+    <!-- 典例分析 -->
+    <div class="mindmap-section classic-examples">
+      <div class="section-header">
+        <div class="section-icon">●</div>
+        <div class="section-title">典例分析</div>
+      </div>
+      <div class="section-content">
+        {{classic_examples}}
+      </div>
+    </div>
+    
+    <!-- 变式训练 -->
+    <div class="mindmap-section variation-training">
+      <div class="section-header">
+        <div class="section-icon">◆</div>
+        <div class="section-title">变式训练</div>
+      </div>
+      <div class="section-content">
+        {{variation_training}}
+      </div>
+    </div>
+    
+    <!-- 易错警示 -->
+    <div class="mindmap-section common-mistakes">
+      <div class="section-header">
+        <div class="section-icon">⚠</div>
+        <div class="section-title">易错警示</div>
+      </div>
+      <div class="section-content">
+        {{common_mistakes}}
+      </div>
+    </div>
+    
+    <!-- 巩固练习 -->
+    <div class="mindmap-section practice-section">
+      <div class="section-header">
+        <div class="section-icon">✎</div>
+        <div class="section-title">巩固练习</div>
+      </div>
+      <div class="section-content">
+        {{practice}}
+      </div>
+    </div>
+    
+    <!-- 知识总结 -->
+    <div class="mindmap-section summary-section">
+      <div class="section-header">
+        <div class="section-icon">◉</div>
+        <div class="section-title">知识总结</div>
+      </div>
+      <div class="section-content">
+        {{summary}}
       </div>
     </div>
   </div>
