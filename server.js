@@ -59,7 +59,7 @@ app.post('/api/generate', async (req, res) => {
   });
 });
 
-// 调用 LLM API
+  // 调用 LLM API
 async function callLLM(model, prompt) {
   const response = await fetch(`${BASE_URL}/chat/completions`, {
     method: 'POST',
@@ -101,7 +101,7 @@ async function callLLM(model, prompt) {
   } catch (e) {
     // 如果解析失败，返回结构化文本
     return {
-      topic: topic,
+      topic: prompt.split('知识点：')[1]?.split('\n')[0] || 'Untitled',
       introduction: content,
       explanation: '',
       summary: '',
