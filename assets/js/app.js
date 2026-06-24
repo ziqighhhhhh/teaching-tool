@@ -11,7 +11,8 @@ const App = {
     currentDifficulty: 'basic',
     inputMode: 'text',
     isGenerating: false,
-    lastGeneratedData: null
+    lastGeneratedData: null,
+    demoMode: false  // 演示模式（无 API 时使用 mock 数据）
   },
 
   /**
@@ -33,10 +34,11 @@ const App = {
     
     // 检查 API 配置
     if (!SkillCaller.isConfigured()) {
+      this.state.demoMode = true;
       this.showConfigNotice();
     }
     
-    console.log('App initialized');
+    console.log('App initialized. Demo mode:', this.state.demoMode);
   },
 
   /**
@@ -236,15 +238,15 @@ const App = {
       return;
     }
     
-    // 检查 API 配置
-    if (!SkillCaller.isConfigured()) {
+    // 检查 API 配置（演示模式下跳过）
+    if (!this.state.demoMode && !SkillCaller.isConfigured()) {
       const endpoint = prompt('请输入 API 端点（如：https://api.openai.com/v1/chat/completions）：');
       const key = prompt('请输入 API 密钥：');
       if (endpoint && key) {
         SkillCaller.updateConfig({ apiEndpoint: endpoint, apiKey: key });
+        this.state.demoMode = false;
       } else {
-        alert('需要配置 API 才能生成讲义');
-        return;
+        this.state.demoMode = true;
       }
     }
     
@@ -272,13 +274,19 @@ const App = {
         }
       }
       
-      // 调用 API 生成
-      console.log('Generating handout...');
-      const data = await SkillCaller.generateHandout(topic, {
-        subject: this.elements.subjectSelect.value,
-        grade: this.elements.gradeSelect.value,
-        difficulty: this.state.currentDifficulty
-      });
+      // 生成数据
+      let data;
+      if (this.state.demoMode) {
+        console.log('Demo mode: generating mock data');
+        data = this.generateMockData(topic);
+      } else {
+        console.log('Generating handout...');
+        data = await SkillCaller.generateHandout(topic, {
+          subject: this.elements.subjectSelect.value,
+          grade: this.elements.gradeSelect.value,
+          difficulty: this.state.currentDifficulty
+        });
+      }
       
       // 保存到缓存
       const html = await this.renderHandout(data);
@@ -297,6 +305,60 @@ const App = {
     } finally {
       this.setGenerating(false);
     }
+  },
+
+  /**
+   * 生成演示数据（mock）
+   * @param {string} topic - 知识点
+   * @returns {object} - 演示数据
+   */
+  generateMockData(topic) {
+    return {
+      topic: topic,
+      subject: this.elements.subjectSelect.value || '数学',
+      grade: this.elements.gradeSelect.value || '七年级',
+      difficulty: this.state.currentDifficulty,
+      introduction: `本节课我们将学习"${topic}"的相关知识。这是学科中的重要概念，在日常生活和后续学习中都有广泛应用。`,
+      explanation: `${topic}的核心概念包括：\n\n1. 定义与性质：理解${topic}的基本定义，掌握其本质特征。\n\n2. 关键公式：牢记相关公式，并能灵活运用。\n\n3. 应用场景：能够将所学知识应用于实际问题中。\n\n学习${topic}时，建议从具体实例出发，逐步抽象到一般规律，再通过练习巩固理解。`,
+      summary: `通过本节课的学习，我们掌握了${topic}的核心概念和应用方法。重点在于理解定义、掌握公式、灵活应用。建议课后及时复习，完成相关练习。`,
+      keyPoints: [
+        `掌握${topic}的基本定义`,
+        `理解${topic}的核心性质`,
+        `能够运用${topic}解决简单问题`
+      ],
+      difficultPoints: [
+        `理解${topic}的抽象概念`,
+        `灵活运用${topic}解决复杂问题`
+      ],
+      learningObjectives: [
+        `能够准确表述${topic}的定义`,
+        `能够运用${topic}的性质进行判断`,
+        `能够解决与${topic}相关的实际问题`
+      ],
+      keyVocabulary: [topic, '定义', '性质', '应用'],
+      examples: [
+        {
+          title: '基础例题',
+          problem: `已知条件，求${topic}的相关值。`,
+          solution: '根据定义和已知条件，逐步推导...',
+          answer: '最终结果'
+        }
+      ],
+      practice: [
+        {
+          question: `请判断以下说法是否正确，并说明理由。`,
+          hint: '回顾定义和性质',
+          answer: '正确。根据定义...'
+        }
+      ],
+      commonMisconceptions: [
+        {
+          misconception: '容易混淆相关概念',
+          correction: '应准确区分不同概念',
+          explanation: '理解本质区别...'
+        }
+      ]
+    };
   },
 
   /**
@@ -319,7 +381,6 @@ const App = {
         );
       }
     } else if (inputMode === 'upload') {
-      // TODO: 处理文件上传
       return this.elements.topicInput.value.trim();
     }
     
@@ -368,7 +429,6 @@ const App = {
   async handleFileUpload(file) {
     if (!file) return;
     
-    // 读取文件内容
     const reader = new FileReader();
     reader.onload = (e) => {
       this.elements.topicInput.value = e.target.result;
@@ -377,7 +437,6 @@ const App = {
     if (file.type === 'text/plain' || file.name.endsWith('.md')) {
       reader.readAsText(file);
     } else {
-      // 对于 PDF/Word，需要服务器端处理
       alert('PDF/Word 文件解析需要后端支持，当前版本仅支持文本文件');
     }
   },
@@ -394,7 +453,7 @@ const App = {
    * 显示配置提示
    */
   showConfigNotice() {
-    console.log('API not configured. Please set up in settings.');
+    console.log('API not configured. Running in demo mode with mock data.');
   }
 };
 

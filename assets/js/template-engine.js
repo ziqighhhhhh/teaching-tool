@@ -84,22 +84,45 @@ const TemplateEngine = {
   prepareData(data) {
     const result = {
       topic: data.topic || '未命名知识点',
-      subject: data.subject || '',
-      grade: data.grade || '',
-      difficulty: data.difficulty || '基础',
+      subject: data.subject || '学科',
+      grade: data.grade || '年级',
+      difficulty: this.translateDifficulty(data.difficulty || '基础'),
       introduction: this.formatText(data.introduction || ''),
       explanation: this.formatText(data.explanation || ''),
       summary: this.formatText(data.summary || ''),
-      keyVocabulary: this.formatList(data.keyVocabulary || []),
-      examples: this.formatExamples(data.examples || []),
-      practice: this.formatPractice(data.practice || []),
+      keyVocabulary: this.formatVocabulary(data.keyVocabulary || []),
       commonMisconceptions: this.formatMisconceptions(data.commonMisconceptions || []),
       learningObjectives: this.formatObjectives(data.learningObjectives || []),
-      keyPoints: this.formatList(data.keyPoints || []),
-      difficultPoints: this.formatList(data.difficultPoints || [])
+      keyPoints: this.formatKeyPoints(data.keyPoints || []),
+      difficultPoints: this.formatList(data.difficultPoints || []),
+      examples: this.formatExamples(data.examples || []),
+      practice: this.formatPractice(data.practice || []),
+      // 特定模板字段
+      formula: data.formula || '暂无公式',
+      formulaDesc: data.formulaDesc || '',
+      answer: data.answer || '详见解析',
+      discussion: data.discussion || '请讨论本节课的核心问题',
+      materials: data.materials || '根据实验内容准备相应材料'
     };
 
     return result;
+  },
+
+  /**
+   * 翻译难度
+   * @param {string} difficulty - 难度英文
+   * @returns {string}
+   */
+  translateDifficulty(difficulty) {
+    const map = {
+      'basic': '基础',
+      'advanced': '进阶',
+      'extension': '拓展',
+      '基础': '基础',
+      '进阶': '进阶',
+      '拓展': '拓展'
+    };
+    return map[difficulty] || '基础';
   },
 
   /**
@@ -113,6 +136,7 @@ const TemplateEngine = {
     // 将换行转为段落
     return text
       .split('\n\n')
+      .filter(p => p.trim())
       .map(p => `<p>${p.trim()}</p>`)
       .join('');
   },
@@ -125,6 +149,26 @@ const TemplateEngine = {
   formatList(items) {
     if (!items || items.length === 0) return '<p>暂无</p>';
     return `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+  },
+
+  /**
+   * 格式化核心词汇
+   * @param {array} items - 词汇列表
+   * @returns {string}
+   */
+  formatVocabulary(items) {
+    if (!items || items.length === 0) return '<span class="vocab-item">暂无</span>';
+    return items.map(item => `<span class="vocab-item">${item}</span>`).join('');
+  },
+
+  /**
+   * 格式化重点知识
+   * @param {array} items - 重点列表
+   * @returns {string}
+   */
+  formatKeyPoints(items) {
+    if (!items || items.length === 0) return '<ul class="key-point-list"><li>暂无</li></ul>';
+    return `<ul class="key-point-list">${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
   },
 
   /**
@@ -188,9 +232,9 @@ const TemplateEngine = {
     
     return misconceptions.map(m => `
       <div class="callout">
-        <div><span class="callout-icon">常见误解：</span>${m.misconception}</div>
-        <div><span class="callout-icon">正确理解：</span>${m.correction}</div>
-        <div><span class="callout-icon">解释：</span>${m.explanation}</div>
+        <div><span class="callout-icon">常见误解：</span>${m.misconception || ''}</div>
+        <div><span class="callout-icon">正确理解：</span>${m.correction || ''}</div>
+        <div><span class="callout-icon">解释：</span>${m.explanation || ''}</div>
       </div>
     `).join('');
   },
@@ -201,14 +245,9 @@ const TemplateEngine = {
    * @returns {string}
    */
   formatObjectives(objectives) {
-    if (!objectives || objectives.length === 0) return '<p>暂无</p>';
+    if (!objectives || objectives.length === 0) return '<ul class="objective-list"><li>暂无</li></ul>';
     
-    return objectives.map((obj, i) => `
-      <div class="objective-item">
-        <span class="objective-number">${i + 1}</span>
-        <span class="objective-text">${obj}</span>
-      </div>
-    `).join('');
+    return `<ul class="objective-list">${objectives.map(obj => `<li>${obj}</li>`).join('')}</ul>`;
   }
 };
 
