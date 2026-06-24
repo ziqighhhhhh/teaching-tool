@@ -202,13 +202,87 @@ body {
   background-color: #ff9800;
 }
 
-/* 状态栏 */
-.status-bar {
+/* API 配置 */
+.api-config-section {
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid var(--color-border);
-  font-size: 11px;
+}
+
+.config-toggle-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--color-text-secondary);
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.config-toggle-label:hover {
+  color: var(--color-accent);
+}
+
+.api-config-content .input-group {
+  margin-bottom: 12px;
+}
+
+.api-config-content input[type="text"],
+.api-config-content input[type="password"] {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+}
+
+.config-save-btn {
+  width: 100%;
+  padding: 8px;
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.config-save-btn:hover {
+  background-color: var(--color-accent-hover);
+}
+
+/* 缓存管理 */
+.cache-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.cache-info-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cache-info-bar span {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.cache-clear-btn {
+  padding: 4px 10px;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.cache-clear-btn:hover {
+  background-color: var(--color-error);
+  color: white;
+  border-color: var(--color-error);
 }
 
 /* 编辑预览区 */

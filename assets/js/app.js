@@ -93,6 +93,33 @@ const App = {
       this.switchInputMode(e.target.value);
     });
     
+    // API 配置折叠
+    const configToggle = document.querySelector('.config-toggle-label');
+    if (configToggle) {
+      configToggle.addEventListener('click', () => {
+        const configContent = document.getElementById('api-config-content');
+        if (configContent) {
+          configContent.classList.toggle('hidden');
+        }
+      });
+    }
+    
+    // 保存 API 配置
+    const saveConfigBtn = document.getElementById('save-config-btn');
+    if (saveConfigBtn) {
+      saveConfigBtn.addEventListener('click', () => {
+        this.saveAPIConfig();
+      });
+    }
+    
+    // 清理缓存
+    const clearCacheBtn = document.getElementById('clear-cache-btn');
+    if (clearCacheBtn) {
+      clearCacheBtn.addEventListener('click', () => {
+        this.clearCache();
+      });
+    }
+    
     // 生成按钮
     elements.generateBtn.addEventListener('click', () => {
       this.generateHandout();
@@ -450,6 +477,38 @@ const App = {
   updateCacheInfo() {
     const stats = CacheManager.getStats();
     this.elements.cacheInfo.textContent = `缓存: ${stats.count} 条 (${stats.totalSize})`;
+  },
+
+  /**
+   * 保存 API 配置
+   */
+  saveAPIConfig() {
+    const endpoint = document.getElementById('api-endpoint')?.value?.trim();
+    const key = document.getElementById('api-key')?.value?.trim();
+    const model = document.getElementById('api-model')?.value || 'gpt-4';
+    
+    if (endpoint && key) {
+      SkillCaller.updateConfig({
+        apiEndpoint: endpoint,
+        apiKey: key,
+        model: model
+      });
+      this.state.demoMode = false;
+      alert('API 配置已保存！');
+    } else {
+      alert('请输入 API 端点和密钥');
+    }
+  },
+
+  /**
+   * 清理缓存
+   */
+  clearCache() {
+    if (confirm('确定要清理所有缓存吗？')) {
+      CacheManager.clearAll();
+      this.updateCacheInfo();
+      alert('缓存已清理！');
+    }
   },
 
   /**

@@ -99,9 +99,37 @@
             <button class="generate-btn" id="generate-btn">生成讲义</button>
             <button class="refresh-btn hidden" id="refresh-btn">重新生成</button>
             
-            <!-- 状态显示 -->
-            <div class="status-bar" id="status-bar">
-                <span class="cache-info" id="cache-info"></span>
+            <!-- API 配置 -->
+            <div class="input-section api-config-section">
+                <label for="api-config-toggle" class="config-toggle-label">API 配置 (可选)</label>
+                <div class="api-config-content hidden" id="api-config-content">
+                    <div class="input-group">
+                        <label for="api-endpoint">API 端点</label>
+                        <input type="text" id="api-endpoint" placeholder="https://api.openai.com/v1/chat/completions">
+                    </div>
+                    <div class="input-group">
+                        <label for="api-key">API 密钥</label>
+                        <input type="password" id="api-key" placeholder="sk-...">
+                    </div>
+                    <div class="input-group">
+                        <label for="api-model">模型</label>
+                        <select id="api-model">
+                            <option value="gpt-4">GPT-4</option>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                            <option value="claude-3-sonnet">Claude 3 Sonnet</option>
+                        </select>
+                    </div>
+                    <button class="config-save-btn" id="save-config-btn">保存配置</button>
+                    <p class="hint">不配置将使用演示模式（生成示例数据）</p>
+                </div>
+            </div>
+            
+            <!-- 缓存管理 -->
+            <div class="input-section cache-section">
+                <div class="cache-info-bar">
+                    <span id="cache-info">缓存: 0 条</span>
+                    <button class="cache-clear-btn" id="clear-cache-btn">清理缓存</button>
+                </div>
             </div>
         </aside>
         
