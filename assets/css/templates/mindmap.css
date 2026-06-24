@@ -1,0 +1,138 @@
+/* 思维导图模板 */
+
+.template-mindmap .handout-content {
+  font-family: var(--font-sans);
+  color: var(--theme-text);
+}
+
+.template-mindmap .title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--theme-primary);
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.template-mindmap .mindmap-container {
+  position: relative;
+  min-height: 400px;
+}
+
+.template-mindmap .center-node {
+  background-color: var(--theme-primary);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.template-mindmap .branch {
+  position: relative;
+  margin-left: 60px;
+  margin-bottom: 20px;
+}
+
+.template-mindmap .branch::before {
+  content: "";
+  position: absolute;
+  left: -40px;
+  top: 20px;
+  width: 30px;
+  height: 2px;
+  background-color: var(--theme-primary);
+}
+
+.template-mindmap .branch-node {
+  background-color: var(--theme-primary-light);
+  color: var(--theme-primary);
+  padding: 12px 20px;
+  border-radius: 24px;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 10px;
+  border: 2px solid var(--theme-primary);
+}
+
+.template-mindmap .sub-branch {
+  margin-left: 30px;
+  padding-left: 20px;
+  border-left: 2px solid var(--theme-border);
+}
+
+.template-mindmap .sub-node {
+  background-color: var(--theme-surface);
+  color: var(--theme-text);
+  padding: 8px 16px;
+  border-radius: 16px;
+  display: inline-block;
+  margin: 4px 0;
+  border: 1px solid var(--theme-border);
+  font-size: 14px;
+}
+
+.template-mindmap .detail-node {
+  background-color: var(--theme-highlight);
+  color: var(--theme-text-secondary);
+  padding: 6px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  margin: 2px 0;
+  font-size: 13px;
+}
+
+/* 线性布局（用于打印） */
+.template-mindmap .linear-layout .center-node {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  border-radius: 16px;
+  margin-bottom: 20px;
+}
+
+.template-mindmap .linear-layout .branch {
+  margin-left: 20px;
+}
+
+.template-mindmap .linear-layout .branch::before {
+  display: none;
+}
+
+.template-mindmap .hierarchy-list {
+  list-style: none;
+  padding: 0;
+}
+
+.template-mindmap .hierarchy-list .level-1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--theme-primary);
+  margin: 16px 0 8px;
+  padding: 8px 0;
+  border-bottom: 2px solid var(--theme-primary);
+}
+
+.template-mindmap .hierarchy-list .level-2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--theme-text);
+  margin: 10px 0 6px 20px;
+  padding: 4px 0;
+}
+
+.template-mindmap .hierarchy-list .level-3 {
+  font-size: 14px;
+  color: var(--theme-text-secondary);
+  margin: 4px 0 4px 40px;
+  padding: 2px 0;
+}

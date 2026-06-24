@@ -1,0 +1,114 @@
+<div class="template-interactive">
+  <div class="handout-content">
+    <h1 class="title">{{topic}}</h1>
+    <div class="subtitle">互动式学习课堂</div>
+    
+    <div class="activity-flow">
+      <span class="flow-item">导入</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-item">探究</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-item">讨论</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-item">总结</span>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-header">
+        <div class="card-icon">1</div>
+        <div class="card-title">情境导入</div>
+        <div class="card-time">5分钟</div>
+      </div>
+      <div class="card-content">
+        {{introduction}}
+        <div class="thinking-space">
+          <div class="space-label">思考空间</div>
+          <div class="space-prompt">请结合生活经验，思考这个问题...</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-header">
+        <div class="card-icon">2</div>
+        <div class="card-title">知识探究</div>
+        <div class="card-time">15分钟</div>
+      </div>
+      <div class="card-content">
+        {{explanation}}
+        <div class="group-task">
+          <div class="task-title">小组任务</div>
+          <div>分组讨论，完成以下探究活动</div>
+          <div class="task-roles">
+            <span class="role-tag">记录员</span>
+            <span class="role-tag">汇报员</span>
+            <span class="role-tag">质疑员</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-header">
+        <div class="card-icon">3</div>
+        <div class="card-title">互动讨论</div>
+        <div class="card-time">10分钟</div>
+      </div>
+      <div class="card-content">
+        <div class="discussion-box">
+          <div class="discussion-title">讨论问题</div>
+          <div class="discussion-question">{{discussion}}</div>
+          <ul class="discussion-hints">
+            <li>从多个角度思考这个问题</li>
+            <li>尝试用已学知识解释</li>
+            <li>与同伴分享你的观点</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-header">
+        <div class="card-icon">4</div>
+        <div class="card-title">实验/实践</div>
+        <div class="card-time">15分钟</div>
+      </div>
+      <div class="card-content">
+        <div class="experiment-box">
+          <div class="experiment-title">动手实验</div>
+          <div class="experiment-materials">
+            <div class="materials-title">所需材料</div>
+            <div>{{materials}}</div>
+          </div>
+          <ol class="experiment-steps">
+            <li>按照步骤进行操作</li>
+            <li>记录观察到的现象</li>
+            <li>分析实验结果</li>
+            <li>得出结论</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="card-header">
+        <div class="card-icon">5</div>
+        <div class="card-title">课堂总结</div>
+        <div class="card-time">5分钟</div>
+      </div>
+      <div class="card-content">
+        {{summary}}
+      </div>
+    </div>
+    
+    <div class="reflection-box">
+      <div class="reflection-title">课后反思</div>
+      <ul class="reflection-prompts">
+        <li>今天学到了什么新知识？</li>
+        <li>还有哪些地方不太理解？</li>
+        <li>能否举出生活中的例子？</li>
+        <li>想对老师说些什么？</li>
+      </ul>
+    </div>
+  </div>
+</div>

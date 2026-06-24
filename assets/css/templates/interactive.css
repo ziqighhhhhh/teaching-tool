@@ -1,0 +1,285 @@
+/* 互动课堂模板 */
+
+.template-interactive .handout-content {
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  color: var(--theme-text);
+}
+
+.template-interactive .title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--theme-primary);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.template-interactive .subtitle {
+  text-align: center;
+  color: var(--theme-text-secondary);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.template-interactive .activity-flow {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.template-interactive .activity-flow .flow-item {
+  background-color: var(--theme-primary-light);
+  color: var(--theme-primary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.template-interactive .activity-flow .flow-arrow {
+  color: var(--theme-primary);
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+}
+
+.template-interactive .section-card {
+  background-color: var(--theme-surface);
+  border: 2px solid var(--theme-border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.template-interactive .section-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--theme-border);
+}
+
+.template-interactive .section-card .card-icon {
+  width: 36px;
+  height: 36px;
+  background-color: var(--theme-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.template-interactive .section-card .card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--theme-text);
+}
+
+.template-interactive .section-card .card-time {
+  margin-left: auto;
+  background-color: var(--theme-primary-light);
+  color: var(--theme-primary);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.template-interactive .thinking-space {
+  background-color: var(--theme-bg);
+  border: 2px dashed var(--theme-border);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+  min-height: 100px;
+}
+
+.template-interactive .thinking-space .space-label {
+  font-size: 13px;
+  color: var(--theme-text-secondary);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.template-interactive .thinking-space .space-prompt {
+  font-size: 14px;
+  color: var(--theme-text);
+  margin-bottom: 12px;
+}
+
+.template-interactive .discussion-box {
+  background-color: var(--theme-secondary-light);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.template-interactive .discussion-box .discussion-title {
+  font-weight: 700;
+  color: var(--theme-secondary);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.template-interactive .discussion-box .discussion-question {
+  font-size: 15px;
+  color: var(--theme-text);
+  margin-bottom: 12px;
+}
+
+.template-interactive .discussion-box .discussion-hints {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.template-interactive .discussion-box .discussion-hints li {
+  padding: 4px 0;
+  padding-left: 20px;
+  position: relative;
+  font-size: 13px;
+  color: var(--theme-text-secondary);
+}
+
+.template-interactive .discussion-box .discussion-hints li::before {
+  content: "💡";
+  position: absolute;
+  left: 0;
+}
+
+.template-interactive .group-task {
+  background-color: var(--theme-primary-light);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  border-left: 4px solid var(--theme-primary);
+}
+
+.template-interactive .group-task .task-title {
+  font-weight: 700;
+  color: var(--theme-primary);
+  margin-bottom: 8px;
+}
+
+.template-interactive .group-task .task-roles {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.template-interactive .group-task .task-roles .role-tag {
+  background-color: var(--theme-surface);
+  color: var(--theme-primary);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.template-interactive .experiment-box {
+  background-color: var(--theme-highlight);
+  border: 2px solid var(--theme-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.template-interactive .experiment-box .experiment-title {
+  font-weight: 700;
+  color: var(--theme-text);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.template-interactive .experiment-box .experiment-materials {
+  background-color: var(--theme-surface);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.template-interactive .experiment-box .experiment-materials .materials-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--theme-text-secondary);
+  margin-bottom: 6px;
+}
+
+.template-interactive .experiment-box .experiment-steps {
+  list-style: none;
+  padding: 0;
+  counter-reset: exp-step;
+}
+
+.template-interactive .experiment-box .experiment-steps li {
+  padding: 6px 0;
+  padding-left: 32px;
+  position: relative;
+  font-size: 14px;
+}
+
+.template-interactive .experiment-box .experiment-steps li::before {
+  counter-increment: exp-step;
+  content: counter(exp-step);
+  position: absolute;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  background-color: var(--theme-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.template-interactive .reflection-box {
+  background-color: var(--theme-bg);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  border: 2px solid var(--theme-border);
+}
+
+.template-interactive .reflection-box .reflection-title {
+  font-weight: 700;
+  color: var(--theme-primary);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.template-interactive .reflection-box .reflection-prompts {
+  list-style: none;
+  padding: 0;
+}
+
+.template-interactive .reflection-box .reflection-prompts li {
+  padding: 8px 0;
+  padding-left: 28px;
+  position: relative;
+  border-bottom: 1px solid var(--theme-border);
+  font-size: 14px;
+}
+
+.template-interactive .reflection-box .reflection-prompts li:last-child {
+  border-bottom: none;
+}
+
+.template-interactive .reflection-box .reflection-prompts li::before {
+  content: "📝";
+  position: absolute;
+  left: 0;
+}

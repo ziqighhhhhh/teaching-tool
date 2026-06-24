@@ -1,0 +1,158 @@
+/* 知识卡片模板 */
+
+.template-card .handout-content {
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  color: var(--theme-text);
+}
+
+.template-card .title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--theme-primary);
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+}
+
+.template-card .card-container {
+  background-color: var(--theme-surface);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid var(--theme-border);
+}
+
+.template-card .core-concept {
+  background-color: var(--theme-primary);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.template-card .core-concept .concept-title {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+
+.template-card .core-concept .concept-text {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.template-card .section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--theme-primary);
+  margin-top: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.template-card .section-title::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  background-color: var(--theme-primary);
+  border-radius: 2px;
+}
+
+.template-card .point-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.template-card .point-list li {
+  padding: 10px 0;
+  padding-left: 32px;
+  position: relative;
+  border-bottom: 1px solid var(--theme-border);
+}
+
+.template-card .point-list li:last-child {
+  border-bottom: none;
+}
+
+.template-card .point-list li::before {
+  content: "•";
+  position: absolute;
+  left: 8px;
+  color: var(--theme-primary);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.template-card .memory-tip {
+  background-color: var(--theme-secondary-light);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 20px;
+  border-left: 4px solid var(--theme-secondary);
+}
+
+.template-card .memory-tip .tip-title {
+  font-weight: 700;
+  color: var(--theme-secondary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.template-card .formula-card {
+  background-color: var(--theme-bg);
+  border: 2px solid var(--theme-border);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+  text-align: center;
+}
+
+.template-card .formula-card .formula-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--theme-primary);
+  font-family: var(--font-serif);
+}
+
+.template-card .formula-card .formula-desc {
+  font-size: 13px;
+  color: var(--theme-text-secondary);
+  margin-top: 8px;
+}
+
+.template-card .quick-check {
+  background-color: var(--theme-highlight);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.template-card .quick-check .check-title {
+  font-weight: 700;
+  color: var(--theme-text);
+  margin-bottom: 10px;
+}
+
+.template-card .quick-check .check-item {
+  padding: 6px 0;
+  padding-left: 24px;
+  position: relative;
+  font-size: 14px;
+}
+
+.template-card .quick-check .check-item::before {
+  content: "?";
+  position: absolute;
+  left: 0;
+  color: var(--theme-primary);
+  font-weight: bold;
+}

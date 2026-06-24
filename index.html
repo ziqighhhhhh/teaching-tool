@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能教辅讲义生成器</title>
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/themes.css">
+    <link rel="stylesheet" href="assets/css/templates/classic.css">
+    <link rel="stylesheet" href="assets/css/templates/card.css">
+    <link rel="stylesheet" href="assets/css/templates/mindmap.css">
+    <link rel="stylesheet" href="assets/css/templates/problem-solving.css">
+    <link rel="stylesheet" href="assets/css/templates/interactive.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 输入面板 -->
+        <aside class="input-panel">
+            <header class="panel-header">
+                <h1>讲义生成器</h1>
+                <p class="subtitle">输入知识点，自动生成精美讲义</p>
+            </header>
+            
+            <div class="input-section">
+                <label for="input-mode">输入方式</label>
+                <select id="input-mode">
+                    <option value="text">直接输入知识点</option>
+                    <option value="textbook">选择教科书章节</option>
+                    <option value="upload">上传文档</option>
+                </select>
+            </div>
+            
+            <!-- 文本输入 -->
+            <div class="input-group" id="text-input-group">
+                <label for="topic-input">知识点描述</label>
+                <textarea id="topic-input" rows="4" placeholder="例如：请生成关于"光的折射"的讲义，包含定义、定律、例题..."></textarea>
+            </div>
+            
+            <!-- 教科书选择 -->
+            <div class="input-group hidden" id="textbook-input-group">
+                <label>选择章节</label>
+                <div class="cascade-select">
+                    <select id="subject-select">
+                        <option value="">学科</option>
+                    </select>
+                    <select id="grade-select">
+                        <option value="">年级</option>
+                    </select>
+                    <select id="textbook-select">
+                        <option value="">教科书</option>
+                    </select>
+                    <select id="chapter-select">
+                        <option value="">章节</option>
+                    </select>
+                    <select id="section-select">
+                        <option value="">小节</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- 文件上传 -->
+            <div class="input-group hidden" id="upload-input-group">
+                <label for="file-upload">上传文档</label>
+                <input type="file" id="file-upload" accept=".pdf,.doc,.docx,.txt,.md">
+                <p class="hint">支持 PDF、Word、TXT、Markdown</p>
+            </div>
+            
+            <!-- 配置选项 -->
+            <div class="input-section">
+                <label for="template-select">讲义风格</label>
+                <select id="template-select">
+                    <option value="classic">经典课堂</option>
+                    <option value="card">知识卡片</option>
+                    <option value="mindmap">思维导图</option>
+                    <option value="problem-solving">解题步骤</option>
+                    <option value="interactive">互动课堂</option>
+                </select>
+            </div>
+            
+            <div class="input-section">
+                <label for="theme-select">主题颜色</label>
+                <select id="theme-select">
+                    <option value="blue">科技蓝</option>
+                    <option value="green">自然绿</option>
+                    <option value="orange">活力橙</option>
+                </select>
+            </div>
+            
+            <div class="input-section">
+                <label for="difficulty-select">难度</label>
+                <select id="difficulty-select">
+                    <option value="basic">基础</option>
+                    <option value="advanced">进阶</option>
+                    <option value="extension">拓展</option>
+                </select>
+            </div>
+            
+            <!-- 生成按钮 -->
+            <button class="generate-btn" id="generate-btn">生成讲义</button>
+            <button class="refresh-btn hidden" id="refresh-btn">重新生成</button>
+            
+            <!-- 状态显示 -->
+            <div class="status-bar" id="status-bar">
+                <span class="cache-info" id="cache-info"></span>
+            </div>
+        </aside>
+        
+        <!-- 编辑预览区 -->
+        <main class="editor-preview">
+            <div class="toolbar" id="editor-toolbar">
+                <div class="tool-group">
+                    <button data-action="bold" title="加粗">B</button>
+                    <button data-action="italic" title="斜体">I</button>
+                    <button data-action="underline" title="下划线">U</button>
+                </div>
+                <div class="tool-group">
+                    <select id="font-size-select">
+                        <option value="12">12px</option>
+                        <option value="14">14px</option>
+                        <option value="16" selected>16px</option>
+                        <option value="18">18px</option>
+                        <option value="20">20px</option>
+                    </select>
+                </div>
+                <div class="tool-group">
+                    <button id="export-btn" class="export-btn">打印 / 导出 PDF</button>
+                </div>
+            </div>
+            
+            <div class="preview-container" id="preview-container">
+                <div class="handout-page" id="handout-content" contenteditable="true">
+                    <div class="placeholder">
+                        <p>请输入知识点并点击"生成讲义"</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- 加载动画 -->
+    <div class="loading-overlay hidden" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">正在生成讲义...</p>
+    </div>
+    
+    <script src="assets/js/cache.js"></script>
+    <script src="assets/js/skill-caller.js"></script>
+    <script src="assets/js/textbook-adapter.js"></script>
+    <script src="assets/js/template-engine.js"></script>
+    <script src="assets/js/editor.js"></script>
+    <script src="assets/js/pdf-exporter.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

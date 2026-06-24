@@ -1,0 +1,59 @@
+<div class="template-classic">
+  <div class="handout-content">
+    <h1 class="title">{{topic}}</h1>
+    
+    <div class="meta-info">
+      {{#if subject}}<span class="tag">{{subject}}</span>{{/if}}
+      {{#if grade}}<span class="tag">{{grade}}</span>{{/if}}
+      <span class="tag">{{difficulty}}</span>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <div class="section-title">学习目标</div>
+    <div class="section-content">
+      {{learningObjectives}}
+    </div>
+    
+    <div class="section-title">重点难点</div>
+    <div class="section-content">
+      <p><strong>重点：</strong></p>
+      {{keyPoints}}
+      <p><strong>难点：</strong></p>
+      {{difficultPoints}}
+    </div>
+    
+    <div class="section-title">知识讲解</div>
+    <div class="section-content">
+      {{introduction}}
+      {{explanation}}
+    </div>
+    
+    <div class="section-title">例题解析</div>
+    <div class="section-content">
+      {{examples}}
+    </div>
+    
+    <div class="section-title">练习题</div>
+    <div class="section-content">
+      {{practice}}
+    </div>
+    
+    <div class="section-title">常见误解</div>
+    <div class="section-content">
+      {{commonMisconceptions}}
+    </div>
+    
+    <div class="section-title">核心词汇</div>
+    <div class="section-content">
+      <div class="vocabulary-list">
+        {{keyVocabulary}}
+      </div>
+    </div>
+    
+    <div class="summary-box">
+      <div class="summary-title">课堂总结</div>
+      {{summary}}
+    </div>
+  </div>
+</div>

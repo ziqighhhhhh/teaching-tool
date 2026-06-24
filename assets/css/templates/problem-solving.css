@@ -1,0 +1,210 @@
+/* 解题步骤模板 */
+
+.template-problem-solving .handout-content {
+  font-family: var(--font-serif);
+  line-height: 1.8;
+  color: var(--theme-text);
+}
+
+.template-problem-solving .title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--theme-primary);
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--theme-primary);
+}
+
+.template-problem-solving .problem-type-tag {
+  display: inline-block;
+  background-color: var(--theme-primary);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.template-problem-solving .problem-statement {
+  background-color: var(--theme-bg);
+  border: 2px solid var(--theme-border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.template-problem-solving .problem-statement strong {
+  color: var(--theme-primary);
+}
+
+.template-problem-solving .solution-section {
+  margin-bottom: 24px;
+}
+
+.template-problem-solving .solution-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--theme-primary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.template-problem-solving .step-list {
+  list-style: none;
+  padding: 0;
+  counter-reset: step;
+}
+
+.template-problem-solving .step-list li {
+  position: relative;
+  padding-left: 60px;
+  margin-bottom: 20px;
+  min-height: 40px;
+}
+
+.template-problem-solving .step-list li::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  background-color: var(--theme-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.template-problem-solving .step-list li::after {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 40px;
+  width: 2px;
+  height: calc(100% - 20px);
+  background-color: var(--theme-border);
+}
+
+.template-problem-solving .step-list li:last-child::after {
+  display: none;
+}
+
+.template-problem-solving .step-content {
+  background-color: var(--theme-surface);
+  border: 1px solid var(--theme-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.template-problem-solving .step-title {
+  font-weight: 700;
+  color: var(--theme-primary);
+  margin-bottom: 4px;
+}
+
+.template-problem-solving .step-detail {
+  color: var(--theme-text);
+  line-height: 1.6;
+}
+
+.template-problem-solving .formula-box {
+  background-color: var(--theme-primary-light);
+  border: 2px solid var(--theme-primary);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 12px 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--theme-primary);
+}
+
+.template-problem-solving .key-formula {
+  background-color: var(--theme-highlight);
+  border-left: 4px solid var(--theme-primary);
+  padding: 12px 16px;
+  margin: 16px 0;
+  font-size: 15px;
+}
+
+.template-problem-solving .answer-box {
+  background-color: var(--theme-secondary-light);
+  border: 2px solid var(--theme-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.template-problem-solving .answer-box .answer-label {
+  font-size: 14px;
+  color: var(--theme-secondary);
+  margin-bottom: 8px;
+}
+
+.template-problem-solving .answer-box .answer-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--theme-secondary);
+}
+
+.template-problem-solving .similar-problems {
+  margin-top: 24px;
+}
+
+.template-problem-solving .similar-problems .similar-title {
+  font-weight: 700;
+  color: var(--theme-text);
+  margin-bottom: 12px;
+  padding-left: 12px;
+  border-left: 4px solid var(--theme-secondary);
+}
+
+.template-problem-solving .similar-item {
+  background-color: var(--theme-bg);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.template-problem-solving .method-summary {
+  background-color: var(--theme-highlight);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.template-problem-solving .method-summary .method-title {
+  font-weight: 700;
+  color: var(--theme-primary);
+  margin-bottom: 10px;
+}
+
+.template-problem-solving .method-summary .method-list {
+  list-style: none;
+  padding: 0;
+}
+
+.template-problem-solving .method-summary .method-list li {
+  padding: 4px 0;
+  padding-left: 24px;
+  position: relative;
+}
+
+.template-problem-solving .method-summary .method-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--theme-primary);
+}
