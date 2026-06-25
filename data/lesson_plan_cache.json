@@ -1,223 +1,54 @@
 {
   "一元一次方程_七年级_basic": {
     "data": {
-      "learningObjectives": [
-        "识别一元一次方程特征",
-        "理解等式性质与移项原理",
-        "应用移项法则求解简单方程"
-      ],
-      "keyPoints": [
-        "掌握解方程标准步骤",
-        "准确执行移项变号"
-      ],
-      "difficultPoints": [
-        "理解移项变号的代数逻辑"
-      ],
-      "teachingActivities": [
+      "knowledge_overview": "<ul><li>仅含一个未知数且最高次为1的等式</li><li>熟练运用移项与系数化1求解</li></ul>",
+      "key_explanation": "<p>方程刻画了现实中的相等关系，一元一次方程是代数入门基石。</p><p>核心是利用等式性质，通过移项合并将未知数孤立，最终化为$x=a$形式。</p><p>建议结合天平模型直观理解平衡原理，并坚持验算。</p>",
+      "classic_examples": [
         {
-          "phase": "导入",
-          "time": "5分钟",
-          "activity": "生活情境设疑引出新知",
-          "format": "全班"
-        },
-        {
-          "phase": "新授",
-          "time": "12分钟",
-          "activity": "讲解等式性质并板书演示移项",
-          "format": "讲解+演示"
-        },
-        {
-          "phase": "练习",
-          "time": "8分钟",
-          "activity": "独立完成基础题并小组互查",
-          "format": "独立+小组"
-        },
-        {
-          "phase": "总结",
-          "time": "5分钟",
-          "activity": "学生复述流程，教师点评",
-          "format": "全班"
+          "title": "例题1",
+          "problem": "解方程 $x+5=12$",
+          "analysis": "观察结构知左侧常数干扰未知数孤立。目标为消去+5，故需执行逆向运算。",
+          "solution": "第一步：两边同减5，式子变为 $x+5-5=12-5$。第二步：化简得 $x=7$。第三步：代入检验成立。",
+          "answer": "$x=7$",
+          "method_summary": "形如$x+a=b$直接两边同减$a$。"
         }
       ],
-      "assessment": [
-        "随堂小测",
-        "小组互评",
-        "即时问答（形成性评估）"
-      ],
-      "differentiation": {
-        "support": [
-          "提供步骤提示卡与数轴图示"
-        ],
-        "extension": [
-          "布置含括号与分母的进阶挑战题"
-        ]
-      }
-    },
-    "timestamp": 1782347184863
-  },
-  "一元一次方程_四年级_basic": {
-    "data": {
-      "learningObjectives": [
-        "记忆方程标准形式",
-        "理解等式平衡原理",
-        "应用移项法则求解"
-      ],
-      "keyPoints": [
-        "方程定义",
-        "等式性质"
-      ],
-      "difficultPoints": [
-        "逆向运算思维"
-      ],
-      "teachingActivities": [
+      "variation_training": [
         {
-          "phase": "导入",
-          "time": "5分钟",
-          "activity": "天平游戏建等量感",
-          "format": "全班"
+          "question": "解 $y-3=8$",
+          "hint": "注意负号，两边应同加3。"
         },
         {
-          "phase": "新授",
-          "time": "10分钟",
-          "activity": "演示移项法则",
-          "format": "讲解演示"
-        },
-        {
-          "phase": "练习",
-          "time": "10分钟",
-          "activity": "分层练习即时互评",
-          "format": "独立合作"
-        },
-        {
-          "phase": "总结",
-          "time": "5分钟",
-          "activity": "口诀复盘流程",
-          "format": "全班"
+          "question": "解 $0.5x=4$",
+          "hint": "两边同乘2以消去系数。"
         }
       ],
-      "assessment": [
-        "课堂观察",
-        "随堂小测"
-      ],
-      "differentiation": {
-        "support": [
-          "提供填空脚手架"
-        ],
-        "extension": [
-          "自编生活情境题"
-        ]
-      }
-    },
-    "timestamp": 1782347419914
-  },
-  "一元一次方程_四年级_extension": {
-    "data": {
-      "learningObjectives": [
-        "记忆等量关系结构",
-        "理解方程平衡本质",
-        "应用等式性质求解"
-      ],
-      "keyPoints": [
-        "等式性质",
-        "标准解题步骤"
-      ],
-      "difficultPoints": [
-        "实际问题抽象建模"
-      ],
-      "teachingActivities": [
+      "common_mistakes": [
         {
-          "phase": "导入",
-          "time": "5分钟",
-          "activity": "天平猜数游戏",
-          "format": "全班"
-        },
-        {
-          "phase": "新授",
-          "time": "10分钟",
-          "activity": "演示平衡原理推导解法",
-          "format": "讲解+演示"
-        },
-        {
-          "phase": "练习",
-          "time": "10分钟",
-          "activity": "小组完成分层任务单",
-          "format": "独立+小组"
-        },
-        {
-          "phase": "总结",
-          "time": "5分钟",
-          "activity": "口述解题逻辑",
-          "format": "全班"
+          "wrong": "移项不变号，如$x+5=12$错写为$x=12+5$",
+          "correct": "移项必变号，正应为$x=12-5$",
+          "reason": "误以为只是位置移动，忽略等式两边同加减的平衡原理。"
         }
       ],
-      "assessment": [
-        "提问诊断概念理解",
-        "任务单即时反馈应用"
-      ],
-      "differentiation": {
-        "support": [
-          "提供填空式步骤提示卡"
+      "practice": {
+        "basic": [
+          {
+            "question": "解 $x-4=9$",
+            "answer": "$x=13$"
+          },
+          {
+            "question": "解 $3x=15$",
+            "answer": "$x=5$"
+          }
         ],
-        "extension": [
-          "设计含隐藏条件的综合建模题"
-        ]
-      }
+        "advanced": [],
+        "extension": []
+      },
+      "summary": "<p>核心为化归思想，将方程逐步转化为$x=a$。</p><p>牢记移项变号法则，养成代入检验习惯，可大幅降低失误率。</p>",
+      "topic": "一元一次方程",
+      "grade": "七年级",
+      "difficulty": "basic"
     },
-    "timestamp": 1782347475036
-  },
-  "一元一次_一年级_extension": {
-    "data": {
-      "learningObjectives": [
-        "理解等量关系",
-        "应用逆运算求未知数",
-        "评价解法合理性"
-      ],
-      "keyPoints": [
-        "识别单一未知量",
-        "掌握平衡原理"
-      ],
-      "difficultPoints": [
-        "构建方程思维"
-      ],
-      "teachingActivities": [
-        {
-          "phase": "导入",
-          "time": "5分",
-          "activity": "猜数破冰",
-          "format": "全班"
-        },
-        {
-          "phase": "新授",
-          "time": "12分",
-          "activity": "天平演示推导",
-          "format": "讲授演示"
-        },
-        {
-          "phase": "练习",
-          "time": "10分",
-          "activity": "分层闯关",
-          "format": "合作探究"
-        },
-        {
-          "phase": "总结",
-          "time": "3分",
-          "activity": "口诀回顾",
-          "format": "全班"
-        }
-      ],
-      "assessment": [
-        "巡视提问",
-        "闯关打卡"
-      ],
-      "differentiation": {
-        "support": [
-          "图示支架"
-        ],
-        "extension": [
-          "多步逆向挑战"
-        ]
-      }
-    },
-    "timestamp": 1782347990567
+    "timestamp": 1782356177861
   }
 }
