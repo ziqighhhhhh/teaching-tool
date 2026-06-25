@@ -431,7 +431,42 @@ const App = {
     );
     
     Editor.setContent(html);
+    
+    // 使用 KaTeX 渲染数学公式
+    this.renderMathInElement();
+    
     return html;
+  },
+
+  /**
+   * 使用 KaTeX 渲染数学公式
+   */
+  renderMathInElement() {
+    // 检查 KaTeX 是否加载
+    if (typeof renderMathInElement === 'undefined') {
+      console.log('KaTeX not loaded yet, retrying...');
+      setTimeout(() => this.renderMathInElement(), 500);
+      return;
+    }
+    
+    const handoutContent = document.getElementById('handout-content');
+    if (!handoutContent) return;
+    
+    try {
+      renderMathInElement(handoutContent, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+          { left: '\\[', right: '\\]', display: true },
+          { left: '\\(', right: '\\)', display: false }
+        ],
+        throwOnError: false,
+        errorColor: '#cc0000'
+      });
+      console.log('Math rendering completed');
+    } catch (e) {
+      console.warn('Math rendering failed:', e);
+    }
   },
 
   /**
