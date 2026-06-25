@@ -1,9 +1,7 @@
-// 讲义生成器 - 纯前端实现
-// 开发阶段：API Key 直接硬编码（仅本地使用）
+// 讲义生成器 - 纯前端 + 最小代理
+// 开发阶段：运行 `node serve.js` 启动代理服务器
 
-const API_KEY = 'sk-a181eed6bc8143a182814a63244f5759';
-const API_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
-const MODEL = 'deepseek-v4-flash';
+const API_URL = 'http://localhost:8082/api/generate'; // 通过本地代理访问 LLM
 
 // 加载提示词（从 skills 目录）
 async function loadPrompt() {
@@ -72,12 +70,9 @@ async function generate() {
         
         const res = await fetch(API_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: MODEL,
+                model: 'deepseek-v4-flash',
                 messages: [{ role: 'user', content: prompt }],
                 max_tokens: difficulty === 'basic' ? 800 : difficulty === 'advanced' ? 1200 : 1500,
                 temperature: 0.5
