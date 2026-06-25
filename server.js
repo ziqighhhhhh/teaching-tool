@@ -8,9 +8,6 @@ dotenv.config();
 
 const { spawn } = require('child_process');
 
-// 学科推断缓存（内存缓存）
-const subjectCache = new Map();
-
 // 教案结构缓存（文件持久化）
 const CACHE_FILE = path.join(__dirname, 'data', 'lesson_plan_cache.json');
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7天
@@ -242,51 +239,9 @@ async function callLLMWithFallback(prompt, options = {}) {
   throw new Error(`All models failed. Last error: ${lastError?.message}`);
 }
 
-// 推断学科
-async function inferSubject(topic) {
-  if (subjectCache.has(topic)) {
-    console.log(`Subject cache hit: ${topic} -> ${subjectCache.get(topic)}`);
-    return subjectCache.get(topic);
-  }
-  
-  const prompt = `请判断以下知识点属于哪个学科。只返回学科名称，不要解释。
-
-可选学科：数学、语文、英语、物理、化学、生物、历史、地理、政治
-
-知识点：${topic}`;
-  
-  const { data } = await callLLMWithFallback(prompt, {
-    temperature: 0.1,
-    maxTokens: 10
-  });
-  
-  const content = data.choices[0].message.content.trim();
-  const validSubjects = ['数学', '语文', '英语', '物理', '化学', '生物', '历史', '地理', '政治'];
-  
-  let inferredSubject = null;
-  
-  if (validSubjects.includes(content)) {
-    inferredSubject = content;
-  } else {
-    for (const subject of validSubjects) {
-      if (content.includes(subject)) {
-        inferredSubject = subject;
-        break;
-      }
-    }
-  }
-  
-  if (!inferredSubject) {
-    throw new Error('无法判断学科');
-  }
-  
-  subjectCache.set(topic, inferredSubject);
-  return inferredSubject;
-}
-
 // 生成教案结构（带缓存，支持模型轮询）
-async function generateLessonPlan(topic, subject, grade, difficulty) {
-  const cacheKey = `${topic}_${subject}_${grade}_${difficulty}`;
+async function generateLessonPlan(topic, grade, difficulty) {
+  const cacheKey = `${topic}_${grade}_${difficulty}`;
   const cached = lessonPlanCache.get(cacheKey);
   
   if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
@@ -294,7 +249,7 @@ async function generateLessonPlan(topic, subject, grade, difficulty) {
     return cached.data;
   }
   
-  const prompt = `${lessonPlanPrompt}\n\n知识点：${topic}\n学科：${subject}\n年级：${grade}\n难度：${difficulty}`;
+  const prompt = `${lessonPlanPrompt}\n\n知识点：${topic}\n年级：${grade}\n难度：${difficulty}`;
   
   const { data } = await callLLMWithFallback(prompt, {
     temperature: 0.5,
@@ -320,8 +275,8 @@ async function generateLessonPlan(topic, subject, grade, difficulty) {
 }
 
 // 生成详细内容（支持模型轮询）
-async function generateTeachingNotes(topic, lessonPlan, subject, grade, difficulty) {
-  const prompt = `${teachingNotesPrompt}\n\n知识点：${topic}\n学科：${subject}\n年级：${grade}\n难度：${difficulty}\n\n教案结构：${JSON.stringify(lessonPlan)}`;
+async function generateTeachingNotes(topic, lessonPlan, grade, difficulty) {
+  const prompt = `${teachingNotesPrompt}\n\n知识点：${topic}\n年级：${grade}\n难度：${difficulty}\n\n教案结构：${JSON.stringify(lessonPlan)}`;
   
   const { data } = await callLLMWithFallback(prompt, {
     temperature: 0.6,
@@ -343,10 +298,9 @@ async function generateTeachingNotes(topic, lessonPlan, subject, grade, difficul
 }
 
 // 合并为7模块结构
-function mergeToSevenModules(lessonPlan, teachingNotes, topic, subject, grade, difficulty) {
+function mergeToSevenModules(lessonPlan, teachingNotes, topic, grade, difficulty) {
   return {
     topic: topic,
-    subject: subject,
     grade: grade,
     difficulty: difficulty,
     
@@ -401,19 +355,10 @@ app.post('/api/generate', async (req, res) => {
     return res.status(400).json({ error: '请输入知识点' });
   }
 
-  // 推断学科
-  let subject = '数学';
-  try {
-    subject = await inferSubject(topic);
-    console.log(`推断学科：${topic} → ${subject}`);
-  } catch (error) {
-    console.warn('学科推断失败，使用默认：数学');
-  }
-
   // 步骤1：生成教案结构（第一次LLM调用，带缓存和模型轮询）
   let lessonPlan;
   try {
-    lessonPlan = await generateLessonPlan(topic, subject, grade, difficulty);
+    lessonPlan = await generateLessonPlan(topic, grade, difficulty);
     console.log('教案结构生成成功');
   } catch (error) {
     console.error('教案结构生成失败:', error);
@@ -426,7 +371,7 @@ app.post('/api/generate', async (req, res) => {
   // 步骤2：生成详细内容（第二次LLM调用，带模型轮询）
   let teachingNotes;
   try {
-    teachingNotes = await generateTeachingNotes(topic, lessonPlan, subject, grade, difficulty);
+    teachingNotes = await generateTeachingNotes(topic, lessonPlan, grade, difficulty);
     console.log('详细内容生成成功');
   } catch (error) {
     console.error('详细内容生成失败:', error);
@@ -437,7 +382,7 @@ app.post('/api/generate', async (req, res) => {
   }
 
   // 合并为7模块
-  const mergedData = mergeToSevenModules(lessonPlan, teachingNotes, topic, subject, grade, difficulty);
+  const mergedData = mergeToSevenModules(lessonPlan, teachingNotes, topic, grade, difficulty);
   
   return res.json({
     success: true,

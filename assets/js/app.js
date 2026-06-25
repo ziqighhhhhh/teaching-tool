@@ -275,7 +275,7 @@ const App = {
           theme: this.state.currentTheme,
           difficulty: this.state.currentDifficulty
         };
-        const data = this.generateMockData(inputData.topic, '数学', inputData.grade);
+        const data = this.generateMockData(inputData.topic, inputData.grade);
         
         if (this.state.debugMode) {
           // 开发阶段：显示纯文本
@@ -335,13 +335,12 @@ const App = {
    * @param {string} grade - 年级
    * @returns {object} - 演示数据
    */
-  generateMockData(topic, subject = '数学', grade = '七年级') {
+  generateMockData(topic, grade = '七年级') {
     const data = {
       topic: topic,
-      subject: subject,
       grade: grade,
       difficulty: this.state.currentDifficulty,
-      knowledge_overview: '<ul><li><strong>核心概念：</strong>{{topic}}是{{subject}}学科的重要知识点</li><li><strong>基本要求：</strong>理解{{topic}}的定义和基本性质</li><li><strong>应用目标：</strong>能够运用{{topic}}解决简单问题</li></ul>',
+      knowledge_overview: '<ul><li><strong>核心概念：</strong>{{topic}}是重要知识点</li><li><strong>基本要求：</strong>理解{{topic}}的定义和基本性质</li><li><strong>应用目标：</strong>能够运用{{topic}}解决简单问题</li></ul>',
       key_explanation: '<p><strong>一、定义与概念</strong></p><p>{{topic}}是指在特定条件下形成的一种数学关系。理解这个定义的关键在于把握其构成要素和适用条件。</p><p><strong>二、核心性质</strong></p><p>1. 基本性质：满足特定条件时成立</p><p>2. 推导关系：可以通过已知条件推导得出</p><p>3. 应用范围：适用于特定类型的题目</p><p><strong>三、学习要点</strong></p><p>学习{{topic}}时，建议先理解概念本质，再通过例题掌握应用方法，最后通过练习巩固。</p>',
       classic_examples: [
         {
@@ -387,7 +386,6 @@ const App = {
       if (typeof obj === 'string') {
         return obj
           .replace(/{{topic}}/g, topic)
-          .replace(/{{subject}}/g, subject)
           .replace(/{{grade}}/g, grade);
       }
       if (Array.isArray(obj)) {
@@ -441,10 +439,10 @@ const App = {
    * @param {object} data - 讲义数据
    */
   showRawContent(data) {
-    const { topic, subject, grade, difficulty } = data;
+    const { topic, grade, difficulty } = data;
     
     let text = `=== ${topic} ===\n`;
-    text += `学科: ${subject} | 年级: ${grade} | 难度: ${difficulty}\n\n`;
+    text += `年级: ${grade} | 难度: ${difficulty}\n\n`;
     
     // 模块1: 知识速览
     text += `【知识速览】\n`;
