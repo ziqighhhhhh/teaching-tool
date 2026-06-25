@@ -57,6 +57,14 @@ button:hover {
     background: #0056b3;
 }
 
+button:nth-of-type(2) {
+    background: #28a745;
+}
+
+button:nth-of-type(2):hover {
+    background: #218838;
+}
+
 button:disabled {
     background: #ccc;
     cursor: not-allowed;
@@ -75,4 +83,30 @@ pre {
     margin-top: 20px;
     max-height: 600px;
     overflow-y: auto;
+}
+
+/* Print-friendly styles for student handouts */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    .container {
+        box-shadow: none;
+        padding: 20px;
+    }
+    .input-group, button {
+        display: none;
+    }
+    h1 {
+        font-size: 20px;
+        text-align: center;
+    }
+    pre {
+        background: white;
+        border: 1px solid #ccc;
+        max-height: none;
+        font-size: 12px;
+        line-height: 1.5;
+    }
 }

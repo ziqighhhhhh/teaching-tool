@@ -80,10 +80,10 @@ async function generate() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: 'deepseek-v4-flash',
-                messages: [{ role: 'user', content: prompt }],
-                max_tokens: difficulty === 'basic' ? 800 : difficulty === 'advanced' ? 1200 : 1500,
-                temperature: 0.5
+                topic: topic,
+                grade: grade,
+                difficulty: difficulty,
+                purpose: purpose
             })
         });
         
@@ -92,15 +92,45 @@ async function generate() {
         }
         
         const data = await res.json();
-        const content = data.choices[0].message.content;
         
-        // 提取 JSON
-        const match = content.match(/\{[\s\S]*\}/);
-        if (!match) {
-            throw new Error('No JSON found in response');
+        // 获取LLM原始输出
+        const rawContent = data.raw || '';
+        
+        if (!rawContent) {
+            throw new Error('No content from LLM');
         }
         
-        const result = JSON.parse(match[0]);
+        // 提取 JSON（LLM可能在JSON前后加了Markdown标记或其他文字）
+        const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) {
+            // 如果没有找到JSON，显示原始内容以便调试
+            document.getElementById('output').textContent = 
+                `=== LLM 原始输出（未找到JSON） ===\n\n${rawContent}\n\n请检查提示词是否要求"只返回JSON"。`;
+            btn.disabled = false;
+            btn.textContent = '生成讲义';
+            return;
+        }
+        
+        let result;
+        try {
+            result = JSON.parse(jsonMatch[0]);
+        } catch (jsonError) {
+            // JSON解析失败，显示原始内容和错误位置
+            const errorPos = jsonError.message.match(/position (\d+)/)?.[1];
+            let debugInfo = `JSON解析错误: ${jsonError.message}\n\n`;
+            if (errorPos) {
+                const start = Math.max(0, parseInt(errorPos) - 50);
+                const end = Math.min(rawContent.length, parseInt(errorPos) + 50);
+                debugInfo += `错误位置附近:\n...${rawContent.slice(start, end)}...\n`;
+                debugInfo += `         ${' '.repeat(Math.min(50, parseInt(errorPos) - start))}^ 错误在这里\n\n`;
+            }
+            debugInfo += `=== 完整原始输出 ===\n${rawContent}`;
+            
+            document.getElementById('output').textContent = debugInfo;
+            btn.disabled = false;
+            btn.textContent = '生成讲义';
+            return;
+        }
         
         // 添加元数据
         result.topic = topic;
