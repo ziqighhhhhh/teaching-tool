@@ -49,7 +49,6 @@ const lessonPlanCache = new Map();
 
 // 技能Prompt缓存
 let lessonPlanPrompt = '';
-let teachingNotesPrompt = '';
 
 // 加载技能Prompt
 function loadSkillPrompts() {
@@ -59,16 +58,10 @@ function loadSkillPrompts() {
       path.join(skillsDir, 'teaching-lesson-plan', 'prompt.md'),
       'utf-8'
     );
-    teachingNotesPrompt = fs.readFileSync(
-      path.join(skillsDir, 'teaching-notes-writing', 'prompt.md'),
-      'utf-8'
-    );
-    console.log('Skill prompts loaded successfully');
+    console.log('Skill prompt loaded successfully');
   } catch (e) {
-    console.warn('Failed to load skill prompts:', e.message);
-    // Fallback prompts
-    lessonPlanPrompt = 'You are a teaching design expert. Generate a lesson plan structure.';
-    teachingNotesPrompt = 'You are an excellent teacher. Generate detailed teaching notes.';
+    console.warn('Failed to load skill prompt:', e.message);
+    lessonPlanPrompt = 'You are a teaching design expert. Generate a complete teaching handout with 7 modules.';
   }
 }
 
@@ -239,21 +232,25 @@ async function callLLMWithFallback(prompt, options = {}) {
   throw new Error(`All models failed. Last error: ${lastError?.message}`);
 }
 
-// 生成教案结构（带缓存，支持模型轮询）
-async function generateLessonPlan(topic, grade, difficulty) {
+// 生成讲义内容（单阶段，直接输出7模块）
+async function generateHandoutContent(topic, grade, difficulty) {
   const cacheKey = `${topic}_${grade}_${difficulty}`;
   const cached = lessonPlanCache.get(cacheKey);
   
   if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
-    console.log('Lesson plan cache hit');
+    console.log('Cache hit');
     return cached.data;
   }
   
-  const prompt = `${lessonPlanPrompt}\n\n知识点：${topic}\n年级：${grade}\n难度：${difficulty}`;
+  // 填充提示词变量
+  const filledPrompt = lessonPlanPrompt
+    .replace(/\{\{topic\}\}/g, topic)
+    .replace(/\{\{grade\}\}/g, grade)
+    .replace(/\{\{difficulty\}\}/g, difficulty);
   
-  const { data } = await callLLMWithFallback(prompt, {
+  const { data } = await callLLMWithFallback(filledPrompt, {
     temperature: 0.5,
-    maxTokens: 800
+    maxTokens: difficulty === 'basic' ? 800 : difficulty === 'advanced' ? 1200 : 1500
   });
   
   const content = data.choices[0].message.content;
@@ -261,90 +258,23 @@ async function generateLessonPlan(topic, grade, difficulty) {
   try {
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      const lessonPlan = JSON.parse(jsonMatch[0]);
+      const handoutData = JSON.parse(jsonMatch[0]);
+      
+      // 添加元数据
+      handoutData.topic = topic;
+      handoutData.grade = grade;
+      handoutData.difficulty = difficulty;
+      
       // 缓存并保存
-      lessonPlanCache.set(cacheKey, { data: lessonPlan, timestamp: Date.now() });
+      lessonPlanCache.set(cacheKey, { data: handoutData, timestamp: Date.now() });
       saveCacheToFile();
-      return lessonPlan;
+      return handoutData;
     }
   } catch (e) {
-    throw new Error('教案结构解析失败：' + e.message);
+    throw new Error('讲义解析失败：' + e.message);
   }
   
-  throw new Error('无法生成教案结构');
-}
-
-// 生成详细内容（支持模型轮询）
-async function generateTeachingNotes(topic, lessonPlan, grade, difficulty) {
-  const prompt = `${teachingNotesPrompt}\n\n知识点：${topic}\n年级：${grade}\n难度：${difficulty}\n\n教案结构：${JSON.stringify(lessonPlan)}`;
-  
-  const { data } = await callLLMWithFallback(prompt, {
-    temperature: 0.6,
-    maxTokens: 1500
-  });
-  
-  const content = data.choices[0].message.content;
-  
-  try {
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]);
-    }
-  } catch (e) {
-    throw new Error('详细内容解析失败：' + e.message);
-  }
-  
-  throw new Error('无法生成详细内容');
-}
-
-// 合并为7模块结构
-function mergeToSevenModules(lessonPlan, teachingNotes, topic, grade, difficulty) {
-  return {
-    topic: topic,
-    grade: grade,
-    difficulty: difficulty,
-    
-    knowledge_overview: `<ul><li><strong>学习目标：</strong>${(lessonPlan.learningObjectives || []).join('；')}</li><li><strong>核心概念：</strong>${topic}</li><li><strong>基本要求：</strong>理解并掌握${topic}</li></ul>`,
-    
-    key_explanation: `<p><strong>一、定义与概念</strong></p><p>${teachingNotes.introduction || ''}</p><p><strong>二、核心知识</strong></p><p>${teachingNotes.explanation || ''}</p>`,
-    
-    classic_examples: (teachingNotes.examples || []).map(ex => ({
-      title: ex.title || '例题',
-      problem: ex.problem || '',
-      analysis: ex.solution || '',
-      solution: ex.solution || '',
-      answer: ex.answer || '',
-      method_summary: '掌握解题方法'
-    })),
-    
-    variation_training: (lessonPlan.differentiation?.extension || []).slice(0, 2).map((ext, i) => ({
-      question: typeof ext === 'string' ? ext : `变式${i + 1}：${ext}`,
-      hint: '注意知识点的灵活应用'
-    })),
-    
-    common_mistakes: (teachingNotes.commonMisconceptions || []).map(cm => ({
-      wrong: cm.misconception || '',
-      correct: cm.correction || '',
-      reason: cm.explanation || ''
-    })),
-    
-    practice: {
-      basic: (teachingNotes.practice || []).slice(0, 2).map(q => ({
-        question: q.question || '',
-        answer: q.answer || ''
-      })),
-      advanced: (teachingNotes.practice || []).slice(2, 3).map(q => ({
-        question: q.question || '',
-        answer: q.answer || ''
-      })),
-      extension: (lessonPlan.differentiation?.extension || []).slice(0, 1).map(q => ({
-        question: typeof q === 'string' ? q : '拓展题',
-        answer: '拓展思考'
-      }))
-    },
-    
-    summary: `<p><strong>知识网络：</strong>${topic}与前后知识的联系</p><p><strong>核心要点：</strong>${(lessonPlan.keyPoints || []).join('、')}</p><p><strong>学习方法：</strong>${teachingNotes.summary || ''}</p>`
-  };
+  throw new Error('无法生成讲义');
 }
 
 // 生成讲义 API
@@ -355,39 +285,23 @@ app.post('/api/generate', async (req, res) => {
     return res.status(400).json({ error: '请输入知识点' });
   }
 
-  // 步骤1：生成教案结构（第一次LLM调用，带缓存和模型轮询）
-  let lessonPlan;
+  // 单阶段生成：直接调用LLM，输出7模块内容
+  let handoutData;
   try {
-    lessonPlan = await generateLessonPlan(topic, grade, difficulty);
-    console.log('教案结构生成成功');
+    handoutData = await generateHandoutContent(topic, grade, difficulty);
+    console.log('讲义生成成功');
   } catch (error) {
-    console.error('教案结构生成失败:', error);
+    console.error('讲义生成失败:', error);
     return res.status(503).json({
-      error: '教案结构生成失败',
+      error: '讲义生成失败',
       message: error.message
     });
   }
-
-  // 步骤2：生成详细内容（第二次LLM调用，带模型轮询）
-  let teachingNotes;
-  try {
-    teachingNotes = await generateTeachingNotes(topic, lessonPlan, grade, difficulty);
-    console.log('详细内容生成成功');
-  } catch (error) {
-    console.error('详细内容生成失败:', error);
-    return res.status(503).json({
-      error: '详细内容生成失败',
-      message: error.message
-    });
-  }
-
-  // 合并为7模块
-  const mergedData = mergeToSevenModules(lessonPlan, teachingNotes, topic, grade, difficulty);
   
   return res.json({
     success: true,
     model: MODELS[0],
-    data: mergedData
+    data: handoutData
   });
 });
 
