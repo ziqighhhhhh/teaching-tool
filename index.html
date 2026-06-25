@@ -3,149 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智能教辅讲义生成器</title>
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/themes.css">
-    <link rel="stylesheet" href="assets/css/templates/classic.css">
-    <link rel="stylesheet" href="assets/css/templates/card.css">
-    <link rel="stylesheet" href="assets/css/templates/mindmap.css">
-    <link rel="stylesheet" href="assets/css/templates/problem-solving.css">
-    <link rel="stylesheet" href="assets/css/templates/interactive.css">
-    <!-- KaTeX 数学公式渲染 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <title>讲义生成器</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <!-- 输入面板 -->
-        <aside class="input-panel">
-            <header class="panel-header">
-                <h1>讲义生成器</h1>
-                <p class="subtitle">输入知识点，自动生成精美讲义</p>
-            </header>
-            
-            <!-- 文本输入 -->
-            <div class="input-group" id="text-input-group">
-                <label for="topic-input">知识点描述</label>
-                <textarea id="topic-input" rows="4" placeholder="例如：请生成关于"光的折射"的讲义，包含定义、定律、例题..."></textarea>
-                
-                <div style="margin-top: 12px;">
-                    <label for="grade-manual">年级</label>
-                    <select id="grade-manual">
-                        <option value="一年级">一年级</option>
-                        <option value="二年级">二年级</option>
-                        <option value="三年级">三年级</option>
-                        <option value="四年级">四年级</option>
-                        <option value="五年级">五年级</option>
-                        <option value="六年级">六年级</option>
-                        <option value="七年级">七年级</option>
-                        <option value="八年级">八年级</option>
-                        <option value="九年级">九年级</option>
-                        <option value="高一">高一</option>
-                        <option value="高二">高二</option>
-                        <option value="高三">高三</option>
-                    </select>
-                </div>
-            </div>
-            
-            <!-- 配置选项 -->
-            <div class="input-section">
-                <label for="template-select">讲义风格</label>
-                <select id="template-select">
-                    <option value="classic">经典课堂</option>
-                    <option value="card">知识卡片</option>
-                    <option value="mindmap">思维导图</option>
-                    <option value="problem-solving">解题步骤</option>
-                    <option value="interactive">互动课堂</option>
-                </select>
-            </div>
-            
-            <div class="input-section">
-                <label for="theme-select">主题颜色</label>
-                <select id="theme-select">
-                    <option value="blue">科技蓝</option>
-                    <option value="green">自然绿</option>
-                    <option value="orange">活力橙</option>
-                </select>
-            </div>
-            
-            <div class="input-section">
-                <label for="difficulty-select">难度</label>
-                <select id="difficulty-select">
-                    <option value="basic">基础</option>
-                    <option value="advanced">进阶</option>
-                    <option value="extension">拓展</option>
-                </select>
-            </div>
-            
-            <!-- 生成按钮 -->
-            <button class="generate-btn" id="generate-btn">生成讲义</button>
-            <button class="refresh-btn hidden" id="refresh-btn">重新生成</button>
-        </aside>
+    <div class="container">
+        <h1>讲义生成器</h1>
         
-            <!-- 编辑预览区 -->
-        <main class="editor-preview">
-            <div class="toolbar" id="editor-toolbar">
-                <div class="tool-group format-group">
-                    <button data-action="bold" title="加粗">B</button>
-                    <button data-action="italic" title="斜体">I</button>
-                    <button data-action="underline" title="下划线">U</button>
-                    <button data-action="strikeThrough" title="删除线">S</button>
-                </div>
-                <div class="tool-group format-group">
-                    <button data-action="justifyLeft" title="左对齐">&#8676;</button>
-                    <button data-action="justifyCenter" title="居中">&#8596;</button>
-                    <button data-action="justifyRight" title="右对齐">&#8677;</button>
-                </div>
-                <div class="tool-group">
-                    <select id="font-size-select">
-                        <option value="12">12px</option>
-                        <option value="14">14px</option>
-                        <option value="16" selected>16px</option>
-                        <option value="18">18px</option>
-                        <option value="20">20px</option>
-                        <option value="24">24px</option>
-                    </select>
-                </div>
-                <div class="tool-group format-group">
-                    <button data-action="insertUnorderedList" title="无序列表">&#8226;&#8226;&#8226;</button>
-                    <button data-action="insertOrderedList" title="有序列表">1. 2. 3.</button>
-                </div>
-                <div class="tool-group format-group">
-                    <button data-action="undo" title="撤销">&#8630;</button>
-                    <button data-action="redo" title="重做">&#8631;</button>
-                </div>
-                <div class="tool-group">
-                    <button id="preview-toggle" class="preview-btn" title="切换预览">打印预览</button>
-                </div>
-                <div class="tool-group">
-                    <button id="export-btn" class="export-btn">打印 / 导出 PDF</button>
-                </div>
-            </div>
-            
-            <div class="preview-container" id="preview-container">
-                <div class="handout-page" id="handout-content" contenteditable="true">
-                    <div class="placeholder">
-                        <p>请输入知识点并点击"生成讲义"</p>
-                    </div>
-                </div>
-            </div>
-        </main>
+        <div class="input-group">
+            <label>知识点</label>
+            <input type="text" id="topic" placeholder="输入知识点（如：一元一次方程）" value="一元一次方程">
+        </div>
+        
+        <div class="input-group">
+            <label>年级</label>
+            <select id="grade">
+                <option value="七年级" selected>七年级</option>
+                <option value="八年级">八年级</option>
+                <option value="九年级">九年级</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label>难度</label>
+            <select id="difficulty">
+                <option value="basic" selected>基础</option>
+                <option value="advanced">进阶</option>
+                <option value="extension">拓展</option>
+            </select>
+        </div>
+        
+        <button onclick="generate()">生成讲义</button>
+        
+        <pre id="output"></pre>
     </div>
     
-    <!-- 加载动画 -->
-    <div class="loading-overlay hidden" id="loading-overlay">
-        <div class="loading-spinner"></div>
-        <p class="loading-text">正在生成讲义...</p>
-    </div>
-    
-    <script src="assets/js/cache.js"></script>
-    <script src="assets/js/skill-caller.js"></script>
-    <script src="assets/js/textbook-adapter.js"></script>
-    <script src="assets/js/template-engine.js"></script>
-    <script src="assets/js/editor.js"></script>
-    <script src="assets/js/pdf-exporter.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
