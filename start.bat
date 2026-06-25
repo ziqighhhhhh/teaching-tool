@@ -1,31 +1,55 @@
 @echo off
-chcp 65001 >nul
+echo.
 echo ===========================================
-echo    讲义生成器 - 一键启动
+echo    Teaching Handout Generator - Start
 echo ===========================================
 echo.
 
-:: 检查 Node.js
+:: Check Node.js
 node -v >nul 2>&1
 if errorlevel 1 (
-    echo [错误] 请先安装 Node.js: https://nodejs.org/
+    echo [ERROR] Node.js not installed!
+    echo Please install from https://nodejs.org/
     pause
     exit /b 1
 )
 
-:: 关闭旧进程
-for /f "tokens=5" %%a in ('netstat -ano ^| findstr :8082') do taskkill /F /PID %%a >nul 2>&1
+for /f "tokens=1" %%a in ('node -v') do echo [OK] Node.js %%a
+echo.
 
-:: 启动并打开浏览器
-echo 启动服务...
+:: Close old process to avoid port conflict
+echo [1/3] Stopping old process...
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr :8082') do taskkill /F /PID %%a >nul 2>&1
+echo [OK] Port 8082 freed
+
+:: Start proxy server
+echo.
+echo [2/3] Starting server...
 start /b node serve.js
+echo [OK] Server started
+
+:: Wait for server ready
+echo.
+echo [3/3] Waiting for server...
 timeout /t 2 /nobreak >nul
+
+:: Open browser
+echo [OK] Opening browser...
 start http://localhost:8082
 
+:: Show info
 echo.
-echo 服务已启动: http://localhost:8082
-echo 按 Ctrl+C 关闭
+echo ===========================================
+echo    Server running!
+echo    URL: http://localhost:8082
+echo ===========================================
 echo.
 
-:: 保持运行
-node -e "require('readline').createInterface(process.stdin).on('close',()=>process.exit(0));setInterval(()=>{},1000)"
+:: Keep window open, press any key to close
+echo Press any key to stop server...
+pause >nul
+
+:: Stop server
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr :8082') do taskkill /F /PID %%a >nul 2>&1
+echo Server stopped
+echo.
