@@ -8,45 +8,47 @@
 </head>
 <body>
     <div class="container">
-        <h1>讲义生成器</h1>
-        
-        <div class="input-group">
-            <label>知识点</label>
-            <input type="text" id="topic" placeholder="输入知识点（如：一元一次方程）" value="一元一次方程">
+        <div class="form-panel">
+            <h1>讲义生成器</h1>
+            
+            <div class="input-group">
+                <label>知识点</label>
+                <input type="text" id="topic" placeholder="输入知识点（如：一元一次方程）" value="一元一次方程">
+            </div>
+            
+            <div class="input-group">
+                <label>年级</label>
+                <select id="grade">
+                    <option value="七年级" selected>七年级</option>
+                    <option value="八年级">八年级</option>
+                    <option value="九年级">九年级</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>难度</label>
+                <select id="difficulty">
+                    <option value="basic" selected>基础</option>
+                    <option value="advanced">进阶</option>
+                    <option value="extension">拔高</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>材料目的</label>
+                <select id="purpose">
+                    <option value="feynman-method" selected>知识点讲解</option>
+                    <option value="sq3r-method">章节预习</option>
+                    <option value="cornell-method">课堂笔记</option>
+                    <option value="mindmap-method">知识结构</option>
+                    <option value="active-recall">课堂检测</option>
+                    <option value="deliberate-practice">练习提升</option>
+                </select>
+            </div>
+            
+            <button onclick="generate()">生成讲义</button>
+            <button onclick="window.print()" style="background: #555;">打印讲义</button>
         </div>
-        
-        <div class="input-group">
-            <label>年级</label>
-            <select id="grade">
-                <option value="七年级" selected>七年级</option>
-                <option value="八年级">八年级</option>
-                <option value="九年级">九年级</option>
-            </select>
-        </div>
-        
-        <div class="input-group">
-            <label>难度</label>
-            <select id="difficulty">
-                <option value="basic" selected>基础</option>
-                <option value="advanced">进阶</option>
-                <option value="extension">拔高</option>
-            </select>
-        </div>
-        
-        <div class="input-group">
-            <label>材料目的</label>
-            <select id="purpose">
-                <option value="feynman-method" selected>知识点讲解</option>
-                <option value="sq3r-method">章节预习</option>
-                <option value="cornell-method">课堂笔记</option>
-                <option value="mindmap-method">知识结构</option>
-                <option value="active-recall">课堂检测</option>
-                <option value="deliberate-practice">练习提升</option>
-            </select>
-        </div>
-        
-        <button onclick="generate()">生成讲义</button>
-        <button onclick="window.print()" style="margin-top: 10px; background: #28a745;">打印讲义</button>
         
         <div id="output"></div>
     </div>

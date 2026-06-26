@@ -191,7 +191,7 @@ function contentToHtml(text) {
     }).join('');
 }
 
-// 费曼学习法 - HTML格式化
+// 费曼学习法 - HTML格式化（紧凑印刷风格）
 function formatFeynman(data) {
     let html = `<div class="lecture-note">`;
     
@@ -203,47 +203,47 @@ function formatFeynman(data) {
     
     // 简单解释
     if (data.simple_explanation) {
-        html += `<section class="module simple-explanation">`;
-        html += `<h2 class="module-title">简单解释</h2>`;
+        html += `<section class="module">`;
+        html += `<h2 class="module-title">一、简单解释</h2>`;
         html += `<div class="module-content">${contentToHtml(data.simple_explanation)}</div>`;
         html += `</section>`;
     }
     
     // 生活类比
     if (data.life_analogy) {
-        html += `<section class="module life-analogy">`;
-        html += `<h2 class="module-title">生活类比</h2>`;
+        html += `<section class="module">`;
+        html += `<h2 class="module-title">二、生活类比</h2>`;
         html += `<div class="module-content">${contentToHtml(data.life_analogy)}</div>`;
         html += `</section>`;
     }
     
     // 知识拆解
     if (data.knowledge_breakdown) {
-        html += `<section class="module knowledge-breakdown">`;
-        html += `<h2 class="module-title">知识拆解</h2>`;
+        html += `<section class="module">`;
+        html += `<h2 class="module-title">三、知识拆解</h2>`;
         html += `<div class="module-content">${contentToHtml(data.knowledge_breakdown)}</div>`;
         html += `</section>`;
     }
     
     // 学生复述
     if (data.student_retell && data.student_retell.task) {
-        html += `<section class="module student-retell">`;
-        html += `<h2 class="module-title">学生复述</h2>`;
-        html += `<div class="module-content task-box">`;
-        html += `<p class="task-label">💡 任务</p>`;
+        html += `<section class="module">`;
+        html += `<h2 class="module-title">四、学生复述</h2>`;
+        html += `<div class="module-content">`;
+        html += `<div class="task-box">`;
+        html += `<span class="task-label">任务</span>`;
         html += `<p>${escapeHtml(data.student_retell.task)}</p>`;
-        html += `</div>`;
-        html += `</section>`;
+        html += `</div></div></section>`;
     }
     
     // 典型例题
     if (data.typical_example) {
         const ex = data.typical_example;
-        html += `<section class="module typical-example">`;
-        html += `<h2 class="module-title">典型例题</h2>`;
+        html += `<section class="module">`;
+        html += `<h2 class="module-title">五、典型例题</h2>`;
         html += `<div class="module-content">`;
         html += `<div class="example-card">`;
-        if (ex.title) html += `<h3 class="example-title">${escapeHtml(ex.title)}</h3>`;
+        html += `<h3 class="example-title">${escapeHtml(ex.title || '例题')}</h3>`;
         if (ex.problem) {
             html += `<div class="example-section">`;
             html += `<span class="section-label">题目</span>`;
@@ -258,12 +258,12 @@ function formatFeynman(data) {
         }
         if (ex.solution) {
             html += `<div class="example-section">`;
-            html += `<span class="section-label">解答</span>`;
+            html += `<span class="section-label">解</span>`;
             html += `<div>${contentToHtml(ex.solution)}</div>`;
             html += `</div>`;
         }
         if (ex.answer) {
-            html += `<div class="example-section answer">`;
+            html += `<div class="example-section">`;
             html += `<span class="section-label">答案</span>`;
             html += `<div class="answer-text">${contentToHtml(ex.answer)}</div>`;
             html += `</div>`;
@@ -273,28 +273,14 @@ function formatFeynman(data) {
     
     // 易错诊断
     if (data.error_diagnosis && data.error_diagnosis.length > 0) {
-        html += `<section class="module error-diagnosis">`;
-        html += `<h2 class="module-title">易错诊断</h2>`;
+        html += `<section class="module">`;
+        html += `<h2 class="module-title">六、易错诊断</h2>`;
         html += `<div class="module-content">`;
         data.error_diagnosis.forEach((m, i) => {
-            html += `<div class="error-card">`;
-            html += `<div class="error-header">`;
-            html += `<span class="error-number">${i + 1}</span>`;
-            html += `<span class="error-tag">常见错误</span>`;
-            html += `</div>`;
-            if (m.wrong) html += `<p class="error-wrong">${contentToHtml(m.wrong)}</p>`;
-            if (m.why) {
-                html += `<div class="error-why">`;
-                html += `<span class="why-label">为什么会错：</span>`;
-                html += `<span>${escapeHtml(m.why)}</span>`;
-                html += `</div>`;
-            }
-            if (m.correct) {
-                html += `<div class="error-correct">`;
-                html += `<span class="correct-label">✓ 正确理解：</span>`;
-                html += `<span>${escapeHtml(m.correct)}</span>`;
-                html += `</div>`;
-            }
+            html += `<div class="error-item">`;
+            html += `<div class="error-wrong">${escapeHtml(m.wrong || '')}</div>`;
+            if (m.why) html += `<div class="error-why">${escapeHtml(m.why)}</div>`;
+            if (m.correct) html += `<div class="error-correct">${escapeHtml(m.correct)}</div>`;
             html += `</div>`;
         });
         html += `</div></section>`;
@@ -304,48 +290,43 @@ function formatFeynman(data) {
     const consolidation = data.consolidation || {};
     if ((consolidation.basic && consolidation.basic.length > 0) || 
         (consolidation.advanced && consolidation.advanced.length > 0)) {
-        html += `<section class="module consolidation">`;
-        html += `<h2 class="module-title">巩固练习</h2>`;
+        html += `<section class="module">`;
+        html += `<h2 class="module-title">七、巩固练习</h2>`;
         html += `<div class="module-content">`;
         
+        let qIndex = 0;
         if (consolidation.basic && consolidation.basic.length > 0) {
             html += `<h3 class="practice-level">基础巩固</h3>`;
-            html += `<div class="practice-list">`;
-            consolidation.basic.forEach((q, i) => {
+            consolidation.basic.forEach((q) => {
+                qIndex++;
                 html += `<div class="practice-item">`;
                 html += `<div class="practice-question">`;
-                html += `<span class="practice-number">${i + 1}</span>`;
+                html += `<span class="practice-number">${qIndex}.</span>`;
                 html += `<span>${contentToHtml(q.question)}</span>`;
                 html += `</div>`;
                 if (q.answer) {
-                    html += `<div class="practice-answer">`;
-                    html += `<span class="answer-label">答案：</span>`;
-                    html += `<span>${contentToHtml(q.answer)}</span>`;
-                    html += `</div>`;
+                    html += `<span class="answer-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">查看答案</span>`;
+                    html += `<div class="practice-answer">${contentToHtml(q.answer)}</div>`;
                 }
                 html += `</div>`;
             });
-            html += `</div>`;
         }
         
         if (consolidation.advanced && consolidation.advanced.length > 0) {
             html += `<h3 class="practice-level">能力提升</h3>`;
-            html += `<div class="practice-list">`;
-            consolidation.advanced.forEach((q, i) => {
+            consolidation.advanced.forEach((q) => {
+                qIndex++;
                 html += `<div class="practice-item">`;
                 html += `<div class="practice-question">`;
-                html += `<span class="practice-number">${i + 1}</span>`;
+                html += `<span class="practice-number">${qIndex}.</span>`;
                 html += `<span>${contentToHtml(q.question)}</span>`;
                 html += `</div>`;
                 if (q.answer) {
-                    html += `<div class="practice-answer">`;
-                    html += `<span class="answer-label">答案：</span>`;
-                    html += `<span>${contentToHtml(q.answer)}</span>`;
-                    html += `</div>`;
+                    html += `<span class="answer-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">查看答案</span>`;
+                    html += `<div class="practice-answer">${contentToHtml(q.answer)}</div>`;
                 }
                 html += `</div>`;
             });
-            html += `</div>`;
         }
         
         html += `</div></section>`;
@@ -353,20 +334,14 @@ function formatFeynman(data) {
     
     // 常见问题
     if (data.common_questions && data.common_questions.length > 0) {
-        html += `<section class="module common-questions">`;
-        html += `<h2 class="module-title">常见问题</h2>`;
+        html += `<section class="module">`;
+        html += `<h2 class="module-title">八、常见问题</h2>`;
         html += `<div class="module-content">`;
         data.common_questions.forEach((q, i) => {
             html += `<div class="qa-item">`;
-            html += `<div class="question">`;
-            html += `<span class="qa-label q">Q</span>`;
-            html += `<span>${escapeHtml(q)}</span>`;
-            html += `</div>`;
+            html += `<div class="question">${escapeHtml(q)}</div>`;
             if (data.answers && data.answers[i]) {
-                html += `<div class="answer">`;
-                html += `<span class="qa-label a">A</span>`;
-                html += `<span>${escapeHtml(data.answers[i])}</span>`;
-                html += `</div>`;
+                html += `<div class="answer">${escapeHtml(data.answers[i])}</div>`;
             }
             html += `</div>`;
         });
