@@ -1,10 +1,11 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 20px;
     background: #f5f5f5;
     color: #333;
+    line-height: 1.6;
 }
 
 .container {
@@ -70,30 +71,385 @@ button:disabled {
     cursor: not-allowed;
 }
 
-pre {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 4px;
-    border: 1px solid #e9ecef;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
-    font-size: 14px;
-    line-height: 1.6;
+/* ========== 讲义样式 ========== */
+
+#output {
     margin-top: 20px;
-    max-height: 600px;
-    overflow-y: auto;
+    min-height: 100px;
 }
 
-/* Print-friendly styles for student handouts */
+.lecture-note {
+    background: white;
+    border-radius: 8px;
+    padding: 0;
+}
+
+/* 头部 */
+.note-header {
+    text-align: center;
+    padding: 30px 20px;
+    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 0;
+}
+
+.note-header h1 {
+    font-size: 28px;
+    color: #1a1a1a;
+    margin: 0 0 10px 0;
+    font-weight: 700;
+}
+
+.note-meta {
+    color: #666;
+    font-size: 14px;
+}
+
+/* 模块通用 */
+.module {
+    padding: 24px 20px;
+    border-left: 4px solid #dee2e6;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+}
+
+.module:hover {
+    background-color: #fafafa;
+}
+
+.module:last-child {
+    border-bottom: none;
+    border-radius: 0 0 8px 8px;
+}
+
+.module-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.module-content {
+    color: #444;
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.module-content p {
+    margin: 0 0 10px 0;
+}
+
+.module-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* 各模块颜色标识 */
+.simple-explanation { border-left-color: #4CAF50; }
+.simple-explanation .module-title { color: #2e7d32; }
+
+.life-analogy { border-left-color: #FF9800; }
+.life-analogy .module-title { color: #e65100; }
+
+.knowledge-breakdown { border-left-color: #2196F3; }
+.knowledge-breakdown .module-title { color: #1565c0; }
+
+.student-retell { border-left-color: #9C27B0; }
+.student-retell .module-title { color: #7b1fa2; }
+
+.typical-example { border-left-color: #f44336; }
+.typical-example .module-title { color: #c62828; }
+
+.error-diagnosis { border-left-color: #ff5722; }
+.error-diagnosis .module-title { color: #d84315; }
+
+.consolidation { border-left-color: #00BCD4; }
+.consolidation .module-title { color: #00838f; }
+
+.common-questions { border-left-color: #795548; }
+.common-questions .module-title { color: #5d4037; }
+
+/* 任务框 */
+.task-box {
+    background: #f3e5f5;
+    border-radius: 6px;
+    padding: 16px;
+    border-left: 3px solid #9C27B0;
+}
+
+.task-label {
+    font-weight: 700;
+    color: #7b1fa2;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* 例题卡片 */
+.example-card {
+    background: #fafafa;
+    border-radius: 6px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.example-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.example-section {
+    margin-bottom: 14px;
+}
+
+.example-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-label {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+    padding: 2px 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+}
+
+.problem-text {
+    background: white;
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+    font-family: "SF Mono", Monaco, "Cascadia Code", Consolas, monospace;
+    font-size: 14px;
+}
+
+.answer-text {
+    color: #2e7d32;
+    font-weight: 600;
+    background: #e8f5e9;
+    padding: 8px 12px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* 易错诊断 */
+.error-card {
+    background: #fff3e0;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-left: 3px solid #ff5722;
+}
+
+.error-card:last-child {
+    margin-bottom: 0;
+}
+
+.error-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.error-number {
+    width: 24px;
+    height: 24px;
+    background: #ff5722;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.error-tag {
+    font-size: 12px;
+    color: #d84315;
+    font-weight: 600;
+}
+
+.error-wrong {
+    color: #d84315;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.error-why {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.why-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.error-correct {
+    color: #2e7d32;
+    font-size: 14px;
+}
+
+.correct-label {
+    font-weight: 600;
+}
+
+/* 练习 */
+.practice-level {
+    font-size: 15px;
+    font-weight: 700;
+    color: #555;
+    margin: 20px 0 12px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.practice-level:first-child {
+    margin-top: 0;
+}
+
+.practice-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.practice-item {
+    background: #fafafa;
+    padding: 14px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.practice-question {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.practice-number {
+    width: 24px;
+    height: 24px;
+    background: #00BCD4;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.practice-answer {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #e0f7fa;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.answer-label {
+    font-weight: 700;
+    color: #00838f;
+}
+
+/* Q&A */
+.qa-item {
+    background: #fafafa;
+    padding: 14px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 10px;
+}
+
+.qa-item:last-child {
+    margin-bottom: 0;
+}
+
+.question {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.answer {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    color: #555;
+    padding: 8px 12px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.qa-label {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: white;
+}
+
+.qa-label.q {
+    background: #795548;
+}
+
+.qa-label.a {
+    background: #5d4037;
+}
+
+/* 数学公式 */
+.math-formula {
+    font-family: "Times New Roman", Times, serif;
+    font-style: italic;
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #333;
+}
+
+/* 错误提示 */
+.error {
+    background: #ffebee;
+    color: #c62828;
+    padding: 20px;
+    border-radius: 6px;
+    border-left: 4px solid #f44336;
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Print-friendly styles */
 @media print {
     body {
         background: white;
         padding: 0;
+        max-width: 100%;
     }
     .container {
         box-shadow: none;
-        padding: 20px;
+        padding: 15px;
     }
     .input-group, button {
         display: none;
@@ -102,11 +458,21 @@ pre {
         font-size: 20px;
         text-align: center;
     }
-    pre {
-        background: white;
-        border: 1px solid #ccc;
-        max-height: none;
-        font-size: 12px;
-        line-height: 1.5;
+    #output {
+        margin-top: 0;
+    }
+    .lecture-note {
+        box-shadow: none;
+    }
+    .module {
+        border-left: 2px solid #ccc;
+        padding: 16px 12px;
+        break-inside: avoid;
+    }
+    .module:hover {
+        background-color: transparent;
+    }
+    .example-card, .error-card, .practice-item, .qa-item {
+        break-inside: avoid;
     }
 }

@@ -42,11 +42,12 @@ JSON格式要求：
 - "typical_example"：对象。包含"title"(字符串)、"problem"(字符串,用LaTeX公式)、"analysis"(字符串,分析思路)、"solution"(字符串,详细步骤)、"answer"(字符串,最终答案)。
 - "error_diagnosis"：数组。每个元素是对象，包含"wrong"(常见错误)、"why"(为什么会犯这个错)、"correct"(正确理解)。至少1个错误。
 - "consolidation"：对象。包含"basic"(数组,每个元素有"question"和"answer")和"advanced"(数组,每个元素有"question"和"answer")。
-- "teacher_guide"：对象。包含"teaching_points"(字符串数组,2-3个要点)、"time_allocation"(对象,包含explanation/analogy/breakdown/retell/example/diagnosis/practice共7个字段,都是"5min"这样的格式,总和必须等于35min)、"common_questions"(字符串数组,2个常见问题)、"answers"(字符串数组,对应回答)。
+- "common_questions"：字符串数组，2-3个学生常问的问题。
+- "answers"：字符串数组，对应每个问题的答案，每个答案在1-2句话内。问题与答案必须一一对应。
 
 ## 输出示例（仅供参考格式，不要复制内容）
 
-{"simple_explanation":"...","life_analogy":"...","knowledge_breakdown":"...","student_retell":{"task":"..."},"typical_example":{"title":"...","problem":"...","analysis":"...","solution":"...","answer":"..."},"error_diagnosis":[{"wrong":"...","why":"...","correct":"..."}],"consolidation":{"basic":[{"question":"...","answer":"..."}],"advanced":[{"question":"...","answer":"..."}]},"teacher_guide":{"teaching_points":["...","..."],"time_allocation":{"explanation":"5min","analogy":"3min","breakdown":"5min","retell":"5min","example":"8min","diagnosis":"3min","practice":"6min"},"common_questions":["...","..."],"answers":["...","..."]}}
+{"simple_explanation":"...","life_analogy":"...","knowledge_breakdown":"...","student_retell":{"task":"..."},"typical_example":{"title":"...","problem":"...","analysis":"...","solution":"...","answer":"..."},"error_diagnosis":[{"wrong":"...","why":"...","correct":"..."}],"consolidation":{"basic":[{"question":"...","answer":"..."}],"advanced":[{"question":"...","answer":"..."}]},"common_questions":["...","..."],"answers":["...","..."]}
 
 ## 质量要求
 - 语言必须简单，像跟家人聊天一样，不要像教科书
@@ -54,7 +55,7 @@ JSON格式要求：
 - 学生复述环节只用一句话引导，不要写标准答案
 - 易错诊断必须有"为什么会错"的分析，不是只给正确答案
 - 巩固练习必须与例题类似但变换了条件
-- 教师使用建议的时间分配总和必须等于35分钟（一堂课的时间）
+- 常见问题必须附带答案，Q&A成对出现
 - 使用LaTeX数学公式，如 $x+5=12$（注意：JSON字符串中$不需要转义）
 - 中文输出
 - 只返回JSON，不要任何其他文字
